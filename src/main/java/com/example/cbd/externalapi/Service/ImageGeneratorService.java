@@ -1,11 +1,13 @@
 package com.example.cbd.externalapi.Service;
 
+import com.example.cbd.externalapi.exceptions.ExternalApiException;
+
 import java.io.IOException;
 
 public interface ImageGeneratorService {
 
-    String getImage(String prompt) throws IOException;
+    String getImageByPrompt(String prompt) throws IOException, ExternalApiException;
 
-    String getRandomImage();
+    String getRandomImage() throws IOException, ExternalApiException;
 
 }

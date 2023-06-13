@@ -1,6 +1,6 @@
 package com.example.cbd.externalapi.Service;
 
-import lombok.NoArgsConstructor;
+import com.example.cbd.externalapi.exceptions.ExternalApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,11 @@ public class ImageGenerator implements ImageGeneratorService {
     private String API_TOKEN;
 
     //256x256, 512x512, 1024x1024
-    private String IMAGE_SIZE = "1024x1024";
+    private String IMAGE_SIZE_SMALL = "256x256";
+    private String IMAGE_SIZE_MEDIUM = "512x512";
+    private String IMAGE_SIZE_LARGE = "1024x1024";
+
+    private final String RANDOM_PROMPT = "Please generate a random image";
 
     private WebClient client;
 
@@ -37,52 +42,59 @@ public class ImageGenerator implements ImageGeneratorService {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + API_TOKEN)
                 .build();
-
     }
 
     @Override
-    public String getImage(String prompt) throws IOException {
-        URL url = getUrl(prompt);
-
-        BufferedImage image = ImageIO.read(url);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        ImageIO.write(image, "jpg", byteArrayOutputStream);
-
-
-        byteArrayOutputStream.close();
-
-
+    public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+        URL url = getImageUrl(prompt);
+        processImage(url);
         return "";
     }
 
-    public URL getUrl(String prompt) {
+    @Override
+    public String getRandomImage() throws IOException, ExternalApiException {
+        URL url = getImageUrl(RANDOM_PROMPT);
+        processImage(url);
+        return "";
+    }
+
+    private String processImage(URL url) throws IOException {
+        BufferedImage image = ImageIO.read(url);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", byteArrayOutputStream);
+        byteArrayOutputStream.close();
+
+        //todo what to do with images?
+        return "";
+    }
+
+    private URL getImageUrl(String prompt) throws ExternalApiException {
         try {
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("prompt", prompt);
-            requestBody.put("n", 1);
-            requestBody.put("size", IMAGE_SIZE);
-            var response = client.post()
-                    .uri(ENDPOINT_URL)
-                    .bodyValue(requestBody)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            var response = apiRequest(prompt);
             if (response != null) {
                 return new URL(response);
             }
-            return null;
-        } catch (Exception e) {
-            return null;
+            throw new ExternalApiException("The API was not able to create an Image out of the prompt");
+        } catch (MalformedURLException e) {
+            throw new ExternalApiException("There was a problem generating the image URL. " + e.getMessage());
         }
     }
 
 
 
-
-    @Override
-    public String getRandomImage() {
-        return null;
+    private String apiRequest(String prompt) {
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("prompt", prompt);
+        requestBody.put("n", 1);
+        requestBody.put("size", IMAGE_SIZE_LARGE);
+        return client.post()
+                .uri(ENDPOINT_URL)
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
     }
+
+
+
 }
