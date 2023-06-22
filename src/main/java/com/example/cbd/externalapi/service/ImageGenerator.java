@@ -1,4 +1,4 @@
-package com.example.cbd.externalapi.Service;
+package com.example.cbd.externalapi.service;
 
 import com.example.cbd.externalapi.exceptions.ExternalApiException;
 import org.springframework.http.HttpHeaders;
