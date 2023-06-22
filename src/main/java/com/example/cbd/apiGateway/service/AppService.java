@@ -1,12 +1,14 @@
 package com.example.cbd.apiGateway.service;
 
+import com.example.cbd.externalapi.exceptions.ExternalApiException;
+import com.example.cbd.externalapi.service.ImageGeneratorService;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.StorageService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -14,13 +16,13 @@ public class AppService implements AppServiceMethods {
 
 
     private final StorageService storageService;
-    //todo add different services + add them to constructor
-
+    private final ImageGeneratorService imageGeneratorService;
 
 
     @Autowired
-    public AppService(StorageService storageService) {
+    public AppService(StorageService storageService, ImageGeneratorService imageGeneratorService) {
         this.storageService = storageService;
+        this.imageGeneratorService = imageGeneratorService;
     }
 
     @Override
@@ -54,9 +56,13 @@ public class AppService implements AppServiceMethods {
     }
 
 
+    @Override
+    public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+        return this.imageGeneratorService.getImageByPrompt(prompt);
+    }
 
-
-
-
-
+    @Override
+    public String getRandomImage() throws IOException, ExternalApiException {
+        return this.imageGeneratorService.getRandomImage();
+    }
 }

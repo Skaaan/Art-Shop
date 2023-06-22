@@ -12,7 +12,7 @@ public class ProductConfig {
     @Bean
     CommandLineRunner commandLineRunner(ProductRepository productRepository) {
         return args -> {
-            Product one = new Product(UUID.randomUUID(), "Moin"),
+            Product one = new Product(UUID.randomUUID(), "Moin");
             Product two = new Product(UUID.fromString("hey"), "Second");
         };
     }
