@@ -10,17 +10,17 @@ import java.util.UUID;
 
 public interface AppControllerMethods {
 
-    ResponseEntity<?> getProductById(@NotNull final UUID id);
+    ResponseEntity<?> getProductById(@NotNull final Long id);
 
     ResponseEntity<?> getAllProducts();
 
     ResponseEntity<?> createProduct(@NotNull final Product product);
 
-    ResponseEntity<?> deleteProductById(@NotNull final UUID id);
+    ResponseEntity<?> deleteProductById(@NotNull final Long id);
 
     ResponseEntity<?> deleteAllProducts();
 
-    ResponseEntity<?> updateProduct(@NotNull final UUID id);
+    ResponseEntity<?> updateProduct(@NotNull final Long id);
 
     //getProductsFromUser(@NotNull final String userName);
 

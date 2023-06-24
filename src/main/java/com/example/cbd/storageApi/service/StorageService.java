@@ -20,15 +20,17 @@ public class StorageService implements StorageServiceMethods<Product> {
         this.productRepository = productRepository;
     }
 
+
+    //todo ID verändern?
     @Override
-    public Product getProductById(@NotNull UUID id) {
+    public Product getProductById(@NotNull Long id) {
         //todo, sus?
-        return productRepository.getReferenceById(id);
+        return productRepository.getProductById(id);
     }
 
     @Override
     public Iterable<Product> getAllProducts() {
-        return null;
+        return productRepository.findAll();
     }
 
     @Override
@@ -37,7 +39,7 @@ public class StorageService implements StorageServiceMethods<Product> {
     }
 
     @Override
-    public void deleteProduct(@NotNull UUID id) {
+    public void deleteProduct(@NotNull Long id) {
 
     }
 
@@ -47,7 +49,7 @@ public class StorageService implements StorageServiceMethods<Product> {
     }
 
     @Override
-    public void updateProduct(@NotNull UUID id) {
+    public void updateProduct(@NotNull Long id) {
 
     }
 }

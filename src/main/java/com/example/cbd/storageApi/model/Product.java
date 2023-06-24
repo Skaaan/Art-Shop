@@ -22,7 +22,7 @@ public class Product implements Serializable {
 
     @Id
     @Column(nullable = false, unique = true)
-    private UUID uuid;
+    private Long uuid;
 
 
     @Column
@@ -31,7 +31,7 @@ public class Product implements Serializable {
 
     public Product(String name) {
         this.name = name;
-        this.uuid = UUID.randomUUID();
+        this.uuid = 1L;
     }
 
 

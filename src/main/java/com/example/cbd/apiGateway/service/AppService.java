@@ -26,7 +26,7 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public Product getProductById(@NotNull UUID id) {
+    public Product getProductById(@NotNull Long id) {
         return this.storageService.getProductById(id);
     }
 
@@ -41,7 +41,7 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public void deleteProduct(@NotNull UUID id) {
+    public void deleteProduct(@NotNull Long id) {
         this.storageService.deleteProduct(id);
     }
 
@@ -51,7 +51,7 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public void updateProduct(@NotNull UUID id) {
+    public void updateProduct(@NotNull Long id) {
         this.storageService.updateProduct(id);
     }
 
