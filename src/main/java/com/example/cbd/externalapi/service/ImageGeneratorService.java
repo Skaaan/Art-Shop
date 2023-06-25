@@ -1,4 +1,4 @@
-package com.example.cbd.externalapi.Service;
+package com.example.cbd.externalapi.service;
 
 import com.example.cbd.externalapi.exceptions.ExternalApiException;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 
 @Service
-public class ImageGenerator implements ImageGeneratorService {
+public class ImageGeneratorService implements ImageGeneratorServiceMethods {
 
     private String BASE_URL = "https://api.openai.com/v1";
     private String ENDPOINT_URL = "/images/generations";
@@ -34,7 +34,7 @@ public class ImageGenerator implements ImageGeneratorService {
 
     private WebClient client;
 
-    public ImageGenerator() {
+    public ImageGeneratorService() {
         this.API_TOKEN = System.getenv("TOKEN");
 
         this.client = WebClient.builder()

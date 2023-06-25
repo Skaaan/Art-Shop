@@ -1,10 +1,10 @@
-package com.example.cbd.externalapi.Service;
+package com.example.cbd.externalapi.service;
 
 import com.example.cbd.externalapi.exceptions.ExternalApiException;
 
 import java.io.IOException;
 
-public interface ImageGeneratorService {
+public interface ImageGeneratorServiceMethods {
 
     String getImageByPrompt(String prompt) throws IOException, ExternalApiException;
 
