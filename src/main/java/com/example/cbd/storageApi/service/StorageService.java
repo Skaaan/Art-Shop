@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,16 +41,16 @@ public class StorageService implements StorageServiceMethods<Product> {
 
     @Override
     public void deleteProduct(@NotNull Long id) {
-
+        productRepository.deleteById(id);
     }
 
     @Override
     public void deleteAllProducts() {
-
+        productRepository.deleteAll();
     }
 
     @Override
     public void updateProduct(@NotNull Long id) {
-
+        //productRepository.
     }
 }
