@@ -47,15 +47,15 @@ public class ImageGenerator implements ImageGeneratorService {
     @Override
     public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         URL url = getImageUrl(prompt);
-        processImage(url);
-        return "";
+        //processImage(url);
+        return url.toString();
     }
 
     @Override
     public String getRandomImage() throws IOException, ExternalApiException {
         URL url = getImageUrl(RANDOM_PROMPT);
-        processImage(url);
-        return "";
+        //processImage(url);
+        return url.toString();
     }
 
     private String processImage(URL url) throws IOException {
