@@ -20,7 +20,7 @@ public interface AppControllerMethods {
 
     ResponseEntity<?> deleteAllProducts();
 
-    ResponseEntity<?> updateProduct(@NotNull final Long id);
+    ResponseEntity<?> updateProduct(@NotNull final Long id, String name);
 
     //getProductsFromUser(@NotNull final String userName);
 

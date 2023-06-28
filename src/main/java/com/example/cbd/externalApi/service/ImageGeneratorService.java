@@ -1,6 +1,8 @@
-package com.example.cbd.externalapi.service;
+package com.example.cbd.externalApi.service;
 
-import com.example.cbd.externalapi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
 
     private final WebClient client;
 
+    private static final Logger log = LoggerFactory.getLogger(ImageGeneratorService.class);
+
     public ImageGeneratorService() {
         this.API_TOKEN = System.getenv("TOKEN");
 
@@ -48,6 +52,7 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
     public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         URL url = getImageUrl(prompt);
         //processImage(url);
+        log.info("Image Url: " + url + ", Prompt: " + prompt);
         return url.toString();
     }
 

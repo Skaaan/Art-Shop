@@ -1,7 +1,7 @@
 package com.example.cbd.apiGateway.service;
 
-import com.example.cbd.externalapi.exceptions.ExternalApiException;
-import com.example.cbd.externalapi.service.ImageGeneratorService;
+import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.service.ImageGeneratorService;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.StorageService;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Service
 public class AppService implements AppServiceMethods {
@@ -51,8 +50,8 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public void updateProduct(@NotNull Long id) {
-        this.storageService.updateProduct(id);
+    public void updateProduct(@NotNull Long id, String name) {
+        this.storageService.updateProduct(id, name);
     }
 
 

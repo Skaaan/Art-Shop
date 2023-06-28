@@ -16,6 +16,6 @@ public interface StorageServiceMethods<T> {
 
     void deleteAllProducts();
 
-    void updateProduct(@NotNull final Long id);
+    void updateProduct(@NotNull final Long id, String name);
 
 }

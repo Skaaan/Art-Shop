@@ -1,4 +1,4 @@
-package com.example.cbd.externalapi.exceptions;
+package com.example.cbd.externalApi.exceptions;
 
 public class ExternalApiException extends Exception {
 

@@ -2,25 +2,22 @@ package com.example.cbd.apiGateway.controller;
 
 
 import com.example.cbd.apiGateway.service.AppService;
-import com.example.cbd.apiGateway.service.AppServiceMethods;
-import com.example.cbd.externalapi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
-@RequestMapping(path="api/v1")
+@RequestMapping(path="api/")
 public class AppController implements AppControllerMethods {
 
 
@@ -38,51 +35,52 @@ public class AppController implements AppControllerMethods {
 
 
     //@PreAuthorize("hasRole('user')")
-    @GetMapping(path = "/" + PRODUCT_TAG + "{id}")
+    @GetMapping(path = PRODUCT_TAG + "{id}")
     @ResponseStatus(OK)
     @Override
     //add api description
     public ResponseEntity<?> getProductById(@NotNull @PathVariable("id") Long id) {
         //add logging
-        return status(OK).body(this.appService.getProductById(id));
+        return status(OK).body(appService.getProductById(id));
     }
 
 
-    @GetMapping("/" + PRODUCT_TAG)
+    @GetMapping(path = PRODUCT_TAG)
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> getAllProducts() {
-        return status(OK).body(this.appService.getAllProducts());
+        return status(OK).body(appService.getAllProducts());
     }
 
-    @PostMapping("/" + PRODUCT_TAG)
+    @PostMapping(path = PRODUCT_TAG)
     @Override
     @ResponseStatus(CREATED)
     public ResponseEntity<?> createProduct(@NotNull @RequestBody final Product product) {
-        this.appService.createProduct(product);
+        appService.createProduct(product);
         return status(CREATED).build();
     }
 
-    @DeleteMapping("/" + PRODUCT_TAG + "{id}")
+    @DeleteMapping(path = PRODUCT_TAG + "{id}")
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<?> deleteProductById(@NotNull @PathVariable Long id) {
-        this.appService.deleteProduct(id);
+        appService.deleteProduct(id);
         return status(OK).build();
     }
 
+    @DeleteMapping(path = PRODUCT_TAG)
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<?> deleteAllProducts() {
-        this.appService.deleteAllProducts();
+        appService.deleteAllProducts();
         return status(OK).build();
     }
 
-    @PutMapping(path = "/" + AI_TAG + "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = PRODUCT_TAG + "{id}")
     @ResponseStatus(OK)
     @Override
-    public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id) {
-        this.appService.updateProduct(id);
+    public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id, @RequestParam(required = false) String name) {
+        appService.updateProduct(id, name);
         return status(OK).build();
     }
 
@@ -91,12 +89,12 @@ public class AppController implements AppControllerMethods {
 
 
 
-    @GetMapping("/" + AI_TAG + "{prompt}")
+    @GetMapping(path = AI_TAG + "{prompt}")
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> getAiImage(@NotNull @PathVariable String prompt) {
         try {
-            this.appService.getImageByPrompt(prompt);
+            appService.getImageByPrompt(prompt);
         } catch (IOException | ExternalApiException e) {
             return status(HttpStatus.GATEWAY_TIMEOUT).build();
         }

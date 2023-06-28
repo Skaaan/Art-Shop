@@ -1,6 +1,6 @@
-package com.example.cbd.externalapi.service;
+package com.example.cbd.externalApi.service;
 
-import com.example.cbd.externalapi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.exceptions.ExternalApiException;
 
 import java.io.IOException;
 
