@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+
 @Service
 public class StorageService implements StorageServiceMethods<Product> {
 
 
+
     private final ProductRepository productRepository;
+
+
 
     @Autowired
     public StorageService(ProductRepository productRepository) {
