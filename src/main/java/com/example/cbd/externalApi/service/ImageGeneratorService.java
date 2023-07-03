@@ -1,11 +1,14 @@
-package com.example.cbd.externalapi.service;
+package com.example.cbd.externalApi.service;
 
-import com.example.cbd.externalapi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
 import javax.imageio.ImageIO;
@@ -34,10 +37,11 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
 
     private final WebClient client;
 
-    public ImageGeneratorService() {
-        this.API_TOKEN = System.getenv("TOKEN");
+    private static final Logger log = LoggerFactory.getLogger(ImageGeneratorService.class);
 
-        this.client = WebClient.builder()
+    public ImageGeneratorService() {
+        API_TOKEN = System.getenv("TOKEN");
+        client = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + API_TOKEN)
@@ -47,15 +51,17 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
     @Override
     public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         URL url = getImageUrl(prompt);
-        processImage(url);
-        return "";
+        //processImage(url);
+        log.info("Image Url: " + url + ", Prompt: " + prompt);
+        return url.toString();
     }
 
     @Override
     public String getRandomImage() throws IOException, ExternalApiException {
         URL url = getImageUrl(RANDOM_PROMPT);
-        processImage(url);
-        return "";
+        //processImage(url);
+        System.out.println(url);
+        return url.toString();
     }
 
     private String processImage(URL url) throws IOException {
@@ -87,12 +93,19 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
         requestBody.put("prompt", prompt);
         requestBody.put("n", 1);
         requestBody.put("size", IMAGE_SIZE_LARGE);
-        return client.post()
-                .uri(ENDPOINT_URL)
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            return client.post()
+                    .uri(ENDPOINT_URL)
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            System.out.println(e.getStatusCode().value());
+            System.out.println(e.getResponseBodyAsString());
+            return "";
+        }
+
     }
 
 
