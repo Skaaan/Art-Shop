@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
 import javax.imageio.ImageIO;
@@ -39,9 +40,8 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
     private static final Logger log = LoggerFactory.getLogger(ImageGeneratorService.class);
 
     public ImageGeneratorService() {
-        this.API_TOKEN = System.getenv("TOKEN");
-
-        this.client = WebClient.builder()
+        API_TOKEN = System.getenv("TOKEN");
+        client = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + API_TOKEN)
@@ -60,6 +60,7 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
     public String getRandomImage() throws IOException, ExternalApiException {
         URL url = getImageUrl(RANDOM_PROMPT);
         //processImage(url);
+        System.out.println(url);
         return url.toString();
     }
 
@@ -92,12 +93,19 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
         requestBody.put("prompt", prompt);
         requestBody.put("n", 1);
         requestBody.put("size", IMAGE_SIZE_LARGE);
-        return client.post()
-                .uri(ENDPOINT_URL)
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            return client.post()
+                    .uri(ENDPOINT_URL)
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            System.out.println(e.getStatusCode().value());
+            System.out.println(e.getResponseBodyAsString());
+            return "";
+        }
+
     }
 
 

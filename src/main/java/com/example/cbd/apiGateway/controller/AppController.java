@@ -101,9 +101,15 @@ public class AppController implements AppControllerMethods {
         return status(OK).build();
     }
 
+    @GetMapping(path = AI_TAG)
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<?> getRandomAiImage() {
-        return null;
+        try {
+            appService.getRandomImage();
+        } catch (IOException | ExternalApiException e) {
+            e.printStackTrace();
+        }
+        return status(OK).build();
     }
 }
