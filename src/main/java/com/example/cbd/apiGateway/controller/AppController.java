@@ -3,6 +3,7 @@ package com.example.cbd.apiGateway.controller;
 
 import com.example.cbd.apiGateway.service.AppService;
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class AppController implements AppControllerMethods {
     @GetMapping(path = AI_TAG + "{prompt}")
     @ResponseStatus(OK)
     @Override
-    public ResponseEntity<?> getAiImage(@NotNull @PathVariable String prompt) {
+    public ResponseEntity<PhotoResult> getAiImage(@NotNull @PathVariable String prompt) {
         try {
             appService.getImageByPrompt(prompt);
         } catch (IOException | ExternalApiException e) {
@@ -104,12 +105,12 @@ public class AppController implements AppControllerMethods {
     @GetMapping(path = AI_TAG)
     @Override
     @ResponseStatus(OK)
-    public ResponseEntity<?> getRandomAiImage() {
+    public ResponseEntity<PhotoResult> getRandomAiImage() {
         try {
-            appService.getRandomImage();
+            return status(OK).body(appService.getRandomImage());
         } catch (IOException | ExternalApiException e) {
             e.printStackTrace();
         }
-        return status(OK).build();
+        return status(HttpStatus.BAD_GATEWAY).build();
     }
 }

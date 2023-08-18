@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
+/*
 
 @Service
 public class ImageGeneratorService implements ImageGeneratorServiceMethods {
@@ -110,4 +110,4 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
 
 
 
-}
+}*/

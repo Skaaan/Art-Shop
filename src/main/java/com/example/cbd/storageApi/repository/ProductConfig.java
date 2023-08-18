@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProductConfig {
+
+    @Bean
     CommandLineRunner commandLineRunner(ProductRepository productRepository) {
         return args -> {
             Product one = new Product(1L, "Moin");

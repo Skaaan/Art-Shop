@@ -1,7 +1,8 @@
 package com.example.cbd.apiGateway.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.service.ImageGeneratorService;
+import com.example.cbd.externalApi.model.PhotoResult;
+import com.example.cbd.externalApi.service.ImagePexelsService;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.StorageService;
 import org.jetbrains.annotations.NotNull;
@@ -15,14 +16,22 @@ public class AppService implements AppServiceMethods {
 
 
     private final StorageService storageService;
-    private final ImageGeneratorService imageGeneratorService;
+    private final ImagePexelsService imageGeneratorService;
 
+    @Autowired
+    public AppService(StorageService storageService, ImagePexelsService imageGeneratorService) {
+        this.storageService = storageService;
+        this.imageGeneratorService = imageGeneratorService;
+    }
 
+    /*private final ImageGeneratorService imageGeneratorService;
     @Autowired
     public AppService(StorageService storageService, ImageGeneratorService imageGeneratorService) {
         this.storageService = storageService;
         this.imageGeneratorService = imageGeneratorService;
-    }
+    }*/
+
+
 
     @Override
     public Product getProductById(@NotNull Long id) {
@@ -56,12 +65,12 @@ public class AppService implements AppServiceMethods {
 
 
     @Override
-    public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+    public PhotoResult getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         return this.imageGeneratorService.getImageByPrompt(prompt);
     }
 
     @Override
-    public String getRandomImage() throws IOException, ExternalApiException {
+    public PhotoResult getRandomImage() throws IOException, ExternalApiException {
         return this.imageGeneratorService.getRandomImage();
     }
 }
