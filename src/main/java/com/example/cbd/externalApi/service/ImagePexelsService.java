@@ -22,7 +22,7 @@ public class ImagePexelsService implements ImageGeneratorServiceMethods{
 
     private final String BASE_URL = "https://api.pexels.com/v1/";
     private final String API_TOKEN;
-    private final String RANDOM_PROMPT = "Katze";
+    private final String RANDOM_PROMPT = "Random";
 
     private final WebClient client;
 

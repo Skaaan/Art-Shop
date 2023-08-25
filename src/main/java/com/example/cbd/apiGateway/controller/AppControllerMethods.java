@@ -1,5 +1,6 @@
 package com.example.cbd.apiGateway.controller;
 
+import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,8 @@ public interface AppControllerMethods {
     //getProductsFromUser(@NotNull final String userName);
 
     //external API
-    ResponseEntity<?> getAiImage(@NotNull String prompt);
+    ResponseEntity<PhotoResult> getAiImage(@NotNull String prompt);
 
-    ResponseEntity<?> getRandomAiImage();
-
+    ResponseEntity<PhotoResult> getRandomAiImage();
 
 }

@@ -7,23 +7,22 @@ import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.status;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path="api/")
 public class AppController implements AppControllerMethods {
 
 
-    private static final String PRODUCT_TAG = "product/";
-    private static final String AI_TAG = "ai/";
+    private static final String PRODUCT_URI = "product/";
+    private static final String PEXELS_URI = "pexels/";
 
     private final AppService appService;
 
@@ -36,7 +35,7 @@ public class AppController implements AppControllerMethods {
 
 
     //@PreAuthorize("hasRole('user')")
-    @GetMapping(path = PRODUCT_TAG + "{id}")
+    @GetMapping(path = PRODUCT_URI + "{id}")
     @ResponseStatus(OK)
     @Override
     //add api description
@@ -45,15 +44,14 @@ public class AppController implements AppControllerMethods {
         return status(OK).body(appService.getProductById(id));
     }
 
-
-    @GetMapping(path = PRODUCT_TAG)
+    @GetMapping(path = PRODUCT_URI)
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> getAllProducts() {
         return status(OK).body(appService.getAllProducts());
     }
 
-    @PostMapping(path = PRODUCT_TAG)
+    @PostMapping(path = PRODUCT_URI)
     @Override
     @ResponseStatus(CREATED)
     public ResponseEntity<?> createProduct(@NotNull @RequestBody final Product product) {
@@ -61,7 +59,7 @@ public class AppController implements AppControllerMethods {
         return status(CREATED).build();
     }
 
-    @DeleteMapping(path = PRODUCT_TAG + "{id}")
+    @DeleteMapping(path = PRODUCT_URI + "{id}")
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<?> deleteProductById(@NotNull @PathVariable Long id) {
@@ -69,7 +67,7 @@ public class AppController implements AppControllerMethods {
         return status(OK).build();
     }
 
-    @DeleteMapping(path = PRODUCT_TAG)
+    @DeleteMapping(path = PRODUCT_URI)
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<?> deleteAllProducts() {
@@ -77,7 +75,7 @@ public class AppController implements AppControllerMethods {
         return status(OK).build();
     }
 
-    @PutMapping(path = PRODUCT_TAG + "{id}")
+    @PutMapping(path = PRODUCT_URI + "{id}")
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id, @RequestParam(required = false) String name) {
@@ -90,19 +88,20 @@ public class AppController implements AppControllerMethods {
 
 
 
-    @GetMapping(path = AI_TAG + "{prompt}")
+    @GetMapping(path = PEXELS_URI + "{prompt}")
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<PhotoResult> getAiImage(@NotNull @PathVariable String prompt) {
         try {
-            appService.getImageByPrompt(prompt);
+            return status(OK).body(appService.getImageByPrompt(prompt));
         } catch (IOException | ExternalApiException e) {
-            return status(HttpStatus.GATEWAY_TIMEOUT).build();
+            e.printStackTrace();
         }
-        return status(OK).build();
+        //todo what error code?
+        return status(BAD_GATEWAY).build();
     }
 
-    @GetMapping(path = AI_TAG)
+    @GetMapping(path = PEXELS_URI)
     @Override
     @ResponseStatus(OK)
     public ResponseEntity<PhotoResult> getRandomAiImage() {
@@ -111,6 +110,6 @@ public class AppController implements AppControllerMethods {
         } catch (IOException | ExternalApiException e) {
             e.printStackTrace();
         }
-        return status(HttpStatus.BAD_GATEWAY).build();
+        return status(BAD_GATEWAY).build();
     }
 }
