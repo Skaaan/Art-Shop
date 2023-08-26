@@ -112,4 +112,7 @@ public class AppController implements AppControllerMethods {
         }
         return status(BAD_GATEWAY).build();
     }
+
+
+    //Todo ADD EXCEPTION HANDLER -> throws error codes regarding specific exceptions !!!
 }

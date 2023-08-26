@@ -40,6 +40,9 @@ public class StorageService implements StorageServiceMethods<Product> {
     public void createProduct(@NotNull Product product) {
         Optional<Product> productOptional = productRepository.findById(product.getUuid());
 
+        //todo check product for any non permitted values etc.
+        // could do with extra class "ValidatorService.java" -> throws Exception when e.g. a name has wrong values
+        // check if any value is null e.g.;
         if (productOptional.isPresent()) {
             //todo later check values which cant be taken from user perspective (only unique names or sth)
             // also let this somehow throw a 400 error (if thats actually better) -> rethrow exception and handle that in controller?

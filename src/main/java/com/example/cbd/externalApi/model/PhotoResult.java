@@ -10,6 +10,8 @@ import java.util.List;
 @ToString
 public class PhotoResult {
 
+    //todo delete all unnecessary attributes -> should contain only src with some chosen sizes!
+
     private int total_results;
     private int page;
     private int per_page;

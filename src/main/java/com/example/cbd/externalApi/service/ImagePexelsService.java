@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ImagePexelsService implements ImageGeneratorServiceMethods{
+public class ImagePexelsService implements com.example.cbd.externalApi.service.ImageGeneratorServiceMethods {
 
 
     private final String BASE_URL = "https://api.pexels.com/v1/";
