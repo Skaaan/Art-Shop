@@ -2,6 +2,7 @@ package com.example.cbd.externalApi.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.model.PhotoResult;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Slf4j
 @Service
 public class ImagePexelsService implements com.example.cbd.externalApi.service.ImageGeneratorServiceMethods {
 
@@ -26,7 +29,6 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     private final WebClient client;
 
-    private static final Logger log = LoggerFactory.getLogger(ImagePexelsService.class);
 
 
     public ImagePexelsService() {
@@ -56,11 +58,22 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
         String api_url = uriBuilder.toUriString();
 
-        return client.get()
+        PhotoResult temp = client.get()
                 .uri(api_url)
                 .retrieve()
                 .bodyToMono(PhotoResult.class)
                 .block();
+
+
+        String ts = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
+
+        JsonObject jsonObject = new JsonParser
+
+        log.info();
+
+        //todo convert Result in new Object containing only needed data
+
+        return temp;
 
     }
 

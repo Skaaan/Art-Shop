@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p WHERE p.uuid = ?1")
+    @Query("SELECT p FROM Product p WHERE p.id = ?1")
     Product getProductById(Long id);
 
    // @Modifying

@@ -5,18 +5,22 @@ import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.repository.ProductRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
+@CacheConfig
 public class StorageService implements StorageServiceMethods<Product> {
 
-
     private final ProductRepository productRepository;
+
+    private final String CACHE_TAG = "product";
 
     @Autowired
     public StorageService(ProductRepository productRepository) {
@@ -25,20 +29,22 @@ public class StorageService implements StorageServiceMethods<Product> {
 
 
     //todo ID verändern?
+    @Cacheable(value = CACHE_TAG, key="#id")
     @Override
     public Product getProductById(@NotNull Long id) {
-        //todo, sus?
         return productRepository.getProductById(id);
     }
 
+    @Cacheable(value = CACHE_TAG)
     @Override
     public Iterable<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     @Override
+    @CacheEvict(value=CACHE_TAG, allEntries = true)
     public void createProduct(@NotNull Product product) {
-        Optional<Product> productOptional = productRepository.findById(product.getUuid());
+        Optional<Product> productOptional = productRepository.findById(product.getId());
 
         //todo check product for any non permitted values etc.
         // could do with extra class "ValidatorService.java" -> throws Exception when e.g. a name has wrong values
@@ -52,15 +58,18 @@ public class StorageService implements StorageServiceMethods<Product> {
     }
 
     @Override
+    @CacheEvict(value = CACHE_TAG, key="#id")
     public void deleteProduct(@NotNull Long id) {
         productRepository.deleteById(id);
     }
 
+    @CacheEvict(value = CACHE_TAG, allEntries = true)
     @Override
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }
 
+    @CacheEvict(value = CACHE_TAG, key="#id")
     @Transactional
     @Override
     public void updateProduct(@NotNull Long id, String name) {

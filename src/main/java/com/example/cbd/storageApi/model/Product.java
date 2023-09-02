@@ -2,7 +2,6 @@ package com.example.cbd.storageApi.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok. *;
@@ -22,7 +21,7 @@ public class Product implements Serializable {
 
     @Id
     @Column(nullable = false, unique = true)
-    private Long uuid;
+    private Long id;
 
 
     @Column
@@ -31,7 +30,7 @@ public class Product implements Serializable {
 
     public Product(String name) {
         this.name = name;
-        this.uuid = 1L;
+        this.id = 1L;
     }
 
 
@@ -40,12 +39,12 @@ public class Product implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(uuid, product.uuid) && Objects.equals(name, product.name);
+        return Objects.equals(id, product.id) && Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name);
+        return Objects.hash(id, name);
     }
 }
 
