@@ -1,7 +1,12 @@
 package com.example.cbd.externalApi.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.model.PexelsImage;
 import com.example.cbd.externalApi.model.PhotoResult;
+import com.example.cbd.externalApi.model.Test;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +34,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     private final WebClient client;
 
-
+    ObjectMapper objectMapper;
 
     public ImagePexelsService() {
         API_TOKEN = System.getenv("PEXEL_TOKEN");
@@ -38,6 +43,8 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
                 .defaultHeader(HttpHeaders.AUTHORIZATION, API_TOKEN)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
+        objectMapper = new ObjectMapper();
+
     }
 
     private PhotoResult apiRequest(String prompt) {
@@ -67,15 +74,39 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
         String ts = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
 
-        JsonObject jsonObject = new JsonParser
+        try {
+            convertToObject(ts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
-        log.info();
-
-        //todo convert Result in new Object containing only needed data
 
         return temp;
 
     }
+
+    private Test convertToObject(String json) throws JsonProcessingException {
+
+        JsonNode srcNode = objectMapper.readTree(json);
+
+        JsonNode sizeNode = srcNode
+                .path("photos")
+                .get(0)
+                .path("src");
+
+        PexelsImage image = new PexelsImage()
+                .setSmall(sizeNode.path("small").asText())
+                .setMedium(sizeNode.path("medium").asText())
+                .setLarge(sizeNode.path("large").asText());
+
+        Test returnObj = new Test()
+                .setImages(image);
+
+        log.info("sizeNode: " + sizeNode.toString() + " !!! pexelsImage: " + image.toString() + " !!! returnObject: " + returnObj.toString());
+
+        return returnObj;
+    }
+
 
     private PhotoResult getImageUrl(String prompt) throws ExternalApiException {
         try {
@@ -93,7 +124,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
     @Override
     public PhotoResult getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         PhotoResult res = getImageUrl(prompt);
-        //processImage(url);
+
         //log.info("Image Url: " + res + ", Prompt: " + prompt);
         return res;
     }
@@ -101,8 +132,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
     @Override
     public PhotoResult getRandomImage() throws IOException, ExternalApiException {
         PhotoResult res = getImageUrl(RANDOM_PROMPT);
-        //processImage(url);
-        //System.out.println(res);
+
         return res;
     }
 }

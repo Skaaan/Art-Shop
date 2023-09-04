@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @ToString
 @Accessors(chain = true)
-public class PexelImage {
+public class PexelsImage {
 
     private String small;
     private String medium;

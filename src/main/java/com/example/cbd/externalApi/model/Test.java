@@ -1,6 +1,7 @@
 package com.example.cbd.externalApi.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 @Getter
@@ -8,8 +9,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Accessors(chain = true)
 public class Test {
 
-    private int total_results;
+    private PexelsImage images;
 
+    private String nextPage;
 }

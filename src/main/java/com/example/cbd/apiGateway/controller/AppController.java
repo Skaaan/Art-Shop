@@ -44,7 +44,7 @@ public class AppController implements AppControllerMethods {
     //add api description
     public ResponseEntity<?> getProductById(@NotNull @PathVariable("id") Long id) {
         //add logging
-        log.info("!getProduct by following id \"{}\"", id);
+        log.info("GetProduct by following id \"{}\"", id);
         return status(OK).body(appService.getProductById(id));
     }
 
@@ -52,7 +52,7 @@ public class AppController implements AppControllerMethods {
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> getAllProducts() {
-        log.info("!getAllProducts");
+        log.info("GetAllProducts");
 
         return status(OK).body(appService.getAllProducts());
     }
@@ -61,7 +61,7 @@ public class AppController implements AppControllerMethods {
     @ResponseStatus(CREATED)
     @Override
     public ResponseEntity<?> createProduct(@NotNull @RequestBody final Product product) {
-        log.info("!createProduct: {}", product);
+        log.info("CreateProduct: {}", product);
         appService.createProduct(product);
         return status(CREATED).build();
     }
@@ -70,7 +70,7 @@ public class AppController implements AppControllerMethods {
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> deleteProductById(@NotNull @PathVariable Long id) {
-        log.info("!deleteProduct by following id \"{}\"", id);
+        log.info("DeleteProduct by following id \"{}\"", id);
         appService.deleteProduct(id);
         return status(OK).build();
     }
@@ -79,7 +79,7 @@ public class AppController implements AppControllerMethods {
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> deleteAllProducts() {
-        log.info("!deleteAllProducts");
+        log.info("DeleteAllProducts");
         appService.deleteAllProducts();
         return status(OK).build();
     }
@@ -88,7 +88,7 @@ public class AppController implements AppControllerMethods {
     @ResponseStatus(OK)
     @Override
     public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id, @RequestParam(required = false) String name) {
-        log.info("!updateProduct");
+        log.info("UpdateProduct");
         appService.updateProduct(id, name);
         return status(OK).build();
     }
