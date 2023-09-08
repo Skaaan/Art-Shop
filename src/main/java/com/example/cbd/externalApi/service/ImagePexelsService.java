@@ -8,8 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -17,10 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j
@@ -85,7 +79,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     }
 
-    private Test convertToObject(String json) throws JsonProcessingException {
+    private PexelsImage convertToObject(String json) throws JsonProcessingException {
 
         JsonNode srcNode = objectMapper.readTree(json);
 
@@ -95,16 +89,15 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
                 .path("src");
 
         PexelsImage image = new PexelsImage()
-                .setSmall(sizeNode.path("small").asText())
-                .setMedium(sizeNode.path("medium").asText())
-                .setLarge(sizeNode.path("large").asText());
+                .setTiny(sizeNode.path("tiny").asText())
+                .setPortrait(sizeNode.path("portrait").asText())
+                .setLandscape(sizeNode.path("landscape").asText());
 
-        Test returnObj = new Test()
-                .setImages(image);
+        //todo delete?
+        //Test returnObj = new Test().setImages(image);
 
-        log.info("sizeNode: " + sizeNode.toString() + " !!! pexelsImage: " + image.toString() + " !!! returnObject: " + returnObj.toString());
 
-        return returnObj;
+        return image;
     }
 
 

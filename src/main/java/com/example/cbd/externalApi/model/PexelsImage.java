@@ -12,8 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PexelsImage {
 
-    private String small;
-    private String medium;
-    private String large;
+    private String tiny;
+    private String portrait;
+    private String landscape;
 
 }
