@@ -10,8 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.cbd.externalApi.model.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.status;
@@ -87,9 +89,9 @@ public class AppController implements AppControllerMethods {
     @PutMapping(path = PRODUCT_URI + "{id}")
     @ResponseStatus(OK)
     @Override
-    public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id, @RequestParam(required = false) String name) {
+    public ResponseEntity<?> updateProduct(@NotNull @PathVariable Long id, @RequestParam(required = false) String name, @RequestParam(required = false) String description, @RequestParam(required = false) BigDecimal price, @RequestParam(required = false) Test image) {
         log.info("UpdateProduct");
-        appService.updateProduct(id, name);
+        appService.updateProduct(id, name, description, price, image);
         return status(OK).build();
     }
 
@@ -101,7 +103,7 @@ public class AppController implements AppControllerMethods {
     @GetMapping(path = PEXELS_URI + "{prompt}")
     @ResponseStatus(OK)
     @Override
-    public ResponseEntity<PhotoResult> getAiImage(@NotNull @PathVariable String prompt) {
+    public ResponseEntity<Test> getAiImage(@NotNull @PathVariable String prompt) {
         try {
             return status(OK).body(appService.getImageByPrompt(prompt));
         } catch (IOException | ExternalApiException e) {
@@ -114,7 +116,7 @@ public class AppController implements AppControllerMethods {
     @GetMapping(path = PEXELS_URI)
     @ResponseStatus(OK)
     @Override
-    public ResponseEntity<PhotoResult> getRandomAiImage() {
+    public ResponseEntity<Test> getRandomAiImage() {
         try {
             return status(OK).body(appService.getRandomImage());
         } catch (IOException | ExternalApiException e) {

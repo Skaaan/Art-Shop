@@ -1,10 +1,12 @@
 package com.example.cbd.storageApi.service;
 
 import org.jetbrains.annotations.NotNull;
+import com.example.cbd.externalApi.model.Test;
 
-import java.util.UUID;
+import java.math.BigDecimal;
 
-public interface StorageServiceMethods<T> {
+
+public interface ProductServiceMethods<T> {
 
     T getProductById(@NotNull Long id);
 
@@ -16,6 +18,6 @@ public interface StorageServiceMethods<T> {
 
     void deleteAllProducts();
 
-    void updateProduct(@NotNull final Long id, String name);
+    void updateProduct(@NotNull final Long id, String name, String description, BigDecimal price, Test image);
 
 }

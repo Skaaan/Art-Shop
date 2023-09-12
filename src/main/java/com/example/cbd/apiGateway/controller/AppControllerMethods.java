@@ -4,7 +4,8 @@ import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
-
+import com.example.cbd.externalApi.model.Test;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
@@ -21,13 +22,13 @@ public interface AppControllerMethods {
 
     ResponseEntity<?> deleteAllProducts();
 
-    ResponseEntity<?> updateProduct(@NotNull final Long id, String name);
+    ResponseEntity<?> updateProduct(@NotNull final Long id, String name, String description, BigDecimal price, Test test);
 
     //getProductsFromUser(@NotNull final String userName);
 
     //external API
-    ResponseEntity<PhotoResult> getAiImage(@NotNull String prompt);
+    ResponseEntity<Test> getAiImage(@NotNull String prompt);
 
-    ResponseEntity<PhotoResult> getRandomAiImage();
+    ResponseEntity<Test> getRandomAiImage();
 
 }

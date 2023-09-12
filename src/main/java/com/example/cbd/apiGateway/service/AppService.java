@@ -4,23 +4,25 @@ import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.externalApi.service.ImagePexelsService;
 import com.example.cbd.storageApi.model.Product;
-import com.example.cbd.storageApi.service.StorageService;
+import com.example.cbd.storageApi.service.ProductService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.cbd.externalApi.model.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @Service
 public class AppService implements AppServiceMethods {
 
 
-    private final StorageService storageService;
+    private final ProductService productService;
     private final ImagePexelsService imageGeneratorService;
 
     @Autowired
-    public AppService(StorageService storageService, ImagePexelsService imageGeneratorService) {
-        this.storageService = storageService;
+    public AppService(ProductService productService, ImagePexelsService imageGeneratorService) {
+        this.productService = productService;
         this.imageGeneratorService = imageGeneratorService;
     }
 
@@ -35,42 +37,42 @@ public class AppService implements AppServiceMethods {
 
     @Override
     public Product getProductById(@NotNull Long id) {
-        return this.storageService.getProductById(id);
+        return this.productService.getProductById(id);
     }
 
     @Override
     public Iterable<Product> getAllProducts() {
-        return this.storageService.getAllProducts();
+        return this.productService.getAllProducts();
     }
 
     @Override
     public void createProduct(@NotNull Product product) {
-        this.storageService.createProduct(product);
+        this.productService.createProduct(product);
     }
 
     @Override
     public void deleteProduct(@NotNull Long id) {
-        this.storageService.deleteProduct(id);
+        this.productService.deleteProduct(id);
     }
 
     @Override
     public void deleteAllProducts() {
-        this.storageService.deleteAllProducts();
+        this.productService.deleteAllProducts();
     }
 
     @Override
-    public void updateProduct(@NotNull Long id, String name) {
-        this.storageService.updateProduct(id, name);
+    public void updateProduct(@NotNull Long id, String name, String description, BigDecimal price, Test image) {
+        this.productService.updateProduct(id, name, description, price, image);
     }
 
 
     @Override
-    public PhotoResult getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+    public Test getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         return this.imageGeneratorService.getImageByPrompt(prompt);
     }
 
     @Override
-    public PhotoResult getRandomImage() throws IOException, ExternalApiException {
+    public Test getRandomImage() throws IOException, ExternalApiException {
         return this.imageGeneratorService.getRandomImage();
     }
 }

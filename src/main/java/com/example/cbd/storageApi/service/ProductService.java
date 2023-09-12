@@ -11,19 +11,23 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.cbd.externalApi.model.Test;
+
+
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @CacheConfig
-public class StorageService implements StorageServiceMethods<Product> {
+public class ProductService implements ProductServiceMethods<Product> {
 
     private final ProductRepository productRepository;
 
     private final String CACHE_TAG = "product";
 
     @Autowired
-    public StorageService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -72,7 +76,7 @@ public class StorageService implements StorageServiceMethods<Product> {
     @CacheEvict(value = CACHE_TAG, key="#id")
     @Transactional
     @Override
-    public void updateProduct(@NotNull Long id, String name) {
+    public void updateProduct(@NotNull Long id, String name, String description, BigDecimal price, Test image) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Student with id " + id + " does not exist."));
 

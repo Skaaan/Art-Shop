@@ -41,7 +41,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     }
 
-    private PhotoResult apiRequest(String prompt) {
+    private Test apiRequest(String prompt) throws ExternalApiException {
         //String api_url = "/search?query=" + prompt;
 
         /**
@@ -59,27 +59,18 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
         String api_url = uriBuilder.toUriString();
 
-        PhotoResult temp = client.get()
-                .uri(api_url)
-                .retrieve()
-                .bodyToMono(PhotoResult.class)
-                .block();
+        String jsonString = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
 
-
-        String ts = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
 
         try {
-            convertToObject(ts);
+            return convertToObject(jsonString);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-
-        return temp;
 
     }
 
-    private PexelsImage convertToObject(String json) throws JsonProcessingException {
+    private Test convertToObject(String json) throws JsonProcessingException {
 
         JsonNode srcNode = objectMapper.readTree(json);
 
@@ -93,15 +84,14 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
                 .setPortrait(sizeNode.path("portrait").asText())
                 .setLandscape(sizeNode.path("landscape").asText());
 
-        //todo delete?
-        //Test returnObj = new Test().setImages(image);
+        Test retObj = new Test().setImages(image);
 
 
-        return image;
+        return retObj;
     }
 
 
-    private PhotoResult getImageUrl(String prompt) throws ExternalApiException {
+    private Test getImageUrl(String prompt) throws ExternalApiException {
         try {
             var response = apiRequest(prompt);
             if (response != null) {
@@ -115,16 +105,16 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
     }
 
     @Override
-    public PhotoResult getImageByPrompt(String prompt) throws IOException, ExternalApiException {
-        PhotoResult res = getImageUrl(prompt);
+    public Test getImageByPrompt(String prompt) throws ExternalApiException {
+        Test res = getImageUrl(prompt);
 
         //log.info("Image Url: " + res + ", Prompt: " + prompt);
         return res;
     }
 
     @Override
-    public PhotoResult getRandomImage() throws IOException, ExternalApiException {
-        PhotoResult res = getImageUrl(RANDOM_PROMPT);
+    public Test getRandomImage() throws ExternalApiException {
+        Test res = getImageUrl(RANDOM_PROMPT);
 
         return res;
     }
