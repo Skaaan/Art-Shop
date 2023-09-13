@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import com.example.cbd.externalApi.model.PexelsImage;
 import jakarta.persistence.*;
 import lombok. *;
 import lombok.experimental.Accessors;
@@ -23,6 +22,8 @@ public class Product implements Serializable {
 
 
     @Id
+    //@GeneratedValue(generator = "")
+    //@GenericGenerator(name = "", strategy = "")
     @Column(nullable = false, unique = true)
     private Long id;
 
@@ -40,6 +41,7 @@ public class Product implements Serializable {
         this.description = description;
         this.price = price;
         this.id = 1L;
+        //this.id = UUID.randomUUID();
     }
 
     /*private PexelsImage pexelsImage;
@@ -59,7 +61,9 @@ public class Product implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name);
+        return Objects.equals(this.id, product.id) && Objects.equals(this.name, product.name) && Objects.equals(this.description, product.description)
+                && Objects.equals(this.price, product.price);
+        //todo compare image -> image
     }
 
     @Override

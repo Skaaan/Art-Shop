@@ -1,9 +1,7 @@
 package com.example.cbd.storageApi.service;
 
+import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import org.jetbrains.annotations.NotNull;
-import com.example.cbd.externalApi.model.Test;
-
-import java.math.BigDecimal;
 
 
 public interface ProductServiceMethods<T> {
@@ -14,10 +12,10 @@ public interface ProductServiceMethods<T> {
 
     void createProduct(@NotNull final T product);
 
-    void deleteProduct(@NotNull final Long id);
+    void deleteProduct(@NotNull final Long id) throws ProductNotPresentException;
 
     void deleteAllProducts();
 
-    void updateProduct(@NotNull final Long id, String name, String description, BigDecimal price, Test image);
+    void updateProduct(@NotNull final T product) throws ProductNotPresentException;
 
 }

@@ -1,15 +1,15 @@
 package com.example.cbd.externalApi.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.model.PhotoResult;
-import com.example.cbd.externalApi.model.Test;
+import com.example.cbd.externalApi.model.PexelsImage;
+import com.example.cbd.externalApi.model.PexelsImg;
 
 import java.io.IOException;
 
 public interface ImageGeneratorServiceMethods {
 
-    Test getImageByPrompt(String prompt) throws IOException, ExternalApiException;
+    PexelsImage getImageByPrompt(String prompt) throws IOException, ExternalApiException;
 
-    Test getRandomImage() throws IOException, ExternalApiException;
+    PexelsImage getRandomImage() throws IOException, ExternalApiException;
 
 }

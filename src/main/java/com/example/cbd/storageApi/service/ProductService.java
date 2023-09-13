@@ -1,6 +1,7 @@
 package com.example.cbd.storageApi.service;
 
 
+import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.repository.ProductRepository;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.cbd.externalApi.model.Test;
 
-
-import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,7 +60,10 @@ public class ProductService implements ProductServiceMethods<Product> {
 
     @Override
     @CacheEvict(value = CACHE_TAG, key="#id")
-    public void deleteProduct(@NotNull Long id) {
+    public void deleteProduct(@NotNull Long id) throws ProductNotPresentException {
+        if (productIsPresent(id)) {
+            throw new ProductNotPresentException("");
+        }
         productRepository.deleteById(id);
     }
 
@@ -76,13 +76,15 @@ public class ProductService implements ProductServiceMethods<Product> {
     @CacheEvict(value = CACHE_TAG, key="#id")
     @Transactional
     @Override
-    public void updateProduct(@NotNull Long id, String name, String description, BigDecimal price, Test image) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Student with id " + id + " does not exist."));
+    public void updateProduct(Product product) throws ProductNotPresentException {
 
-        if (name != null && !Objects.equals(product.getName(), name)) {
-            product.setName(name);
+        if (!productIsPresent(product.getId())) {
+            throw new ProductNotPresentException("Student with id: " + product.getId() + " does not exist");
         }
+        productRepository.save(product);
+    }
 
+    private boolean productIsPresent(Long id) {
+        return productRepository.findById(id).isPresent();
     }
 }

@@ -2,8 +2,6 @@ package com.example.cbd.externalApi.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.model.PexelsImage;
-import com.example.cbd.externalApi.model.PhotoResult;
-import com.example.cbd.externalApi.model.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
 
 
 @Slf4j
@@ -41,7 +37,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     }
 
-    private Test apiRequest(String prompt) throws ExternalApiException {
+    private PexelsImage apiRequest(String prompt) throws ExternalApiException {
         //String api_url = "/search?query=" + prompt;
 
         /**
@@ -70,7 +66,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
 
     }
 
-    private Test convertToObject(String json) throws JsonProcessingException {
+    private PexelsImage convertToObject(String json) throws JsonProcessingException {
 
         JsonNode srcNode = objectMapper.readTree(json);
 
@@ -84,14 +80,11 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
                 .setPortrait(sizeNode.path("portrait").asText())
                 .setLandscape(sizeNode.path("landscape").asText());
 
-        Test retObj = new Test().setImages(image);
-
-
-        return retObj;
+        return image;
     }
 
 
-    private Test getImageUrl(String prompt) throws ExternalApiException {
+    private PexelsImage getImageUrl(String prompt) throws ExternalApiException {
         try {
             var response = apiRequest(prompt);
             if (response != null) {
@@ -105,16 +98,16 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
     }
 
     @Override
-    public Test getImageByPrompt(String prompt) throws ExternalApiException {
-        Test res = getImageUrl(prompt);
+    public PexelsImage getImageByPrompt(String prompt) throws ExternalApiException {
+        PexelsImage res = getImageUrl(prompt);
 
         //log.info("Image Url: " + res + ", Prompt: " + prompt);
         return res;
     }
 
     @Override
-    public Test getRandomImage() throws ExternalApiException {
-        Test res = getImageUrl(RANDOM_PROMPT);
+    public PexelsImage getRandomImage() throws ExternalApiException {
+        PexelsImage res = getImageUrl(RANDOM_PROMPT);
 
         return res;
     }

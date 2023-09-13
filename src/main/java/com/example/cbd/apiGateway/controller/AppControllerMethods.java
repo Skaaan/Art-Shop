@@ -1,13 +1,12 @@
 package com.example.cbd.apiGateway.controller;
 
-import com.example.cbd.externalApi.model.PhotoResult;
+import com.example.cbd.externalApi.model.PexelsImage;
+import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
-import com.example.cbd.externalApi.model.Test;
-import java.math.BigDecimal;
-import java.util.UUID;
 
+import java.math.BigDecimal;
 
 
 public interface AppControllerMethods {
@@ -18,17 +17,17 @@ public interface AppControllerMethods {
 
     ResponseEntity<?> createProduct(@NotNull final Product product);
 
-    ResponseEntity<?> deleteProductById(@NotNull final Long id);
+    ResponseEntity<?> deleteProductById(@NotNull final Long id) throws ProductNotPresentException;
 
     ResponseEntity<?> deleteAllProducts();
 
-    ResponseEntity<?> updateProduct(@NotNull final Long id, String name, String description, BigDecimal price, Test test);
+    ResponseEntity<?> updateProduct(@NotNull final Product product) throws ProductNotPresentException;
 
     //getProductsFromUser(@NotNull final String userName);
 
     //external API
-    ResponseEntity<Test> getAiImage(@NotNull String prompt);
+    ResponseEntity<PexelsImage> getAiImage(@NotNull String prompt);
 
-    ResponseEntity<Test> getRandomAiImage();
+    ResponseEntity<PexelsImage> getRandomAiImage();
 
 }

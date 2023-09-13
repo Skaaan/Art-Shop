@@ -1,14 +1,14 @@
 package com.example.cbd.apiGateway.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.model.PhotoResult;
 import com.example.cbd.externalApi.service.ImagePexelsService;
+import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.ProductService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.cbd.externalApi.model.Test;
+import com.example.cbd.externalApi.model.PexelsImage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -51,7 +51,7 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public void deleteProduct(@NotNull Long id) {
+    public void deleteProduct(@NotNull Long id) throws ProductNotPresentException {
         this.productService.deleteProduct(id);
     }
 
@@ -61,18 +61,18 @@ public class AppService implements AppServiceMethods {
     }
 
     @Override
-    public void updateProduct(@NotNull Long id, String name, String description, BigDecimal price, Test image) {
-        this.productService.updateProduct(id, name, description, price, image);
+    public void updateProduct(@NotNull Product product) throws ProductNotPresentException {
+        this.productService.updateProduct(product);
     }
 
 
     @Override
-    public Test getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+    public PexelsImage getImageByPrompt(String prompt) throws IOException, ExternalApiException {
         return this.imageGeneratorService.getImageByPrompt(prompt);
     }
 
     @Override
-    public Test getRandomImage() throws IOException, ExternalApiException {
+    public PexelsImage getRandomImage() throws IOException, ExternalApiException {
         return this.imageGeneratorService.getRandomImage();
     }
 }
