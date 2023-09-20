@@ -2,7 +2,6 @@ package com.example.cbd.externalApi.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.model.PexelsImage;
-import com.example.cbd.externalApi.model.PexelsImg;
 
 import java.io.IOException;
 

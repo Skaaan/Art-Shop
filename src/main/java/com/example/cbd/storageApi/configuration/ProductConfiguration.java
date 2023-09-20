@@ -18,7 +18,7 @@ public class ProductConfiguration {
         return args -> {
             Product one = new Product(1L, "Cat Image", "An image of a cat.", new BigDecimal("20"));
             Product two = new Product(2L, "Dog Image", "An image of a dog.", new BigDecimal("10"));
-            productRepository.saveAll(List.of(one, two));
+//            productRepository.saveAll(List.of(one, two));
         };
     }
 }
