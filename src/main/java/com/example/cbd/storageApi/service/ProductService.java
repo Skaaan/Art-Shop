@@ -61,7 +61,7 @@ public class ProductService implements ProductServiceMethods<Product> {
     @Override
     @CacheEvict(value = CACHE_TAG, key="#id")
     public void deleteProduct(@NotNull Long id) throws ProductNotPresentException {
-        if (productIsPresent(id)) {
+        if (!productIsPresent(id)) {
             throw new ProductNotPresentException("");
         }
         productRepository.deleteById(id);
