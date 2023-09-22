@@ -74,7 +74,7 @@ public class AppController implements AppControllerMethods {
         return status(OK).build();
     }
 
-    @PutMapping(path = PRODUCT_URI + "{id}")
+    @PutMapping(path = PRODUCT_URI)
     @Override
     public ResponseEntity<?> updateProduct(@NotNull @RequestBody Product product) throws ProductNotPresentException {
         log.info("UpdateProduct");
@@ -115,7 +115,7 @@ public class AppController implements AppControllerMethods {
 
     @ExceptionHandler(ProductNotPresentException.class)
     public ResponseEntity<?> productNotPresentException(ProductNotPresentException e) {
-        log.error(e.getMessage());
+        log.error(e.getMessage() + "ExceptionHandler");
         return ResponseEntity.badRequest().build();
     }
 

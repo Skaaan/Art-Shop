@@ -61,7 +61,7 @@ public class ImagePexelsService implements com.example.cbd.externalApi.service.I
         try {
             return convertToObject(jsonString);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ExternalApiException();
         }
 
     }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import com.example.cbd.externalApi.model.PexelsImage;
 import jakarta.persistence.*;
 import lombok. *;
 import lombok.experimental.Accessors;
@@ -31,9 +32,14 @@ public class Product implements Serializable {
     @Column
     private String name;
 
+    @Column
     private String description;
 
+    @Column
     private BigDecimal price;
+
+    @Column
+    private PexelsImage image;
 
 
     public Product(String name, String description, BigDecimal price) {
