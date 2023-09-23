@@ -2,7 +2,6 @@ package com.example.cbd.apiGateway.controller;
 
 import com.example.cbd.apiGateway.service.AppService;
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.model.PexelsImage;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ import static org.springframework.http.ResponseEntity.status;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path="api/")
 @RestController
-public class AppController implements AppControllerMethods {
+public class AppController {
 
     private static final String PRODUCT_URI = "product/";
     private static final String PEXELS_URI = "pexels/";
@@ -35,7 +34,6 @@ public class AppController implements AppControllerMethods {
 
     //@PreAuthorize("hasRole('user')")
     @GetMapping(path = PRODUCT_URI + "{id}")
-    @Override
     //add api description
     public ResponseEntity<?> getProductById(@NotNull @PathVariable("id") Long id) {
         //add logging
@@ -44,14 +42,12 @@ public class AppController implements AppControllerMethods {
     }
 
     @GetMapping(path = PRODUCT_URI)
-    @Override
     public ResponseEntity<?> getAllProducts() {
         log.info("GetAllProducts");
         return status(OK).body(appService.getAllProducts());
     }
 
     @PostMapping(path = PRODUCT_URI)
-    @Override
     public ResponseEntity<?> createProduct(@NotNull @RequestBody final Product product) {
         log.info("CreateProduct: {}", product);
         appService.createProduct(product);
@@ -59,7 +55,6 @@ public class AppController implements AppControllerMethods {
     }
 
     @DeleteMapping(path = PRODUCT_URI + "{id}")
-    @Override
     public ResponseEntity<?> deleteProductById(@NotNull @PathVariable Long id) throws ProductNotPresentException {
         log.info("DeleteProduct by following id \"{}\"", id);
         appService.deleteProduct(id);
@@ -67,7 +62,6 @@ public class AppController implements AppControllerMethods {
     }
 
     @DeleteMapping(path = PRODUCT_URI)
-    @Override
     public ResponseEntity<?> deleteAllProducts() {
         log.info("DeleteAllProducts");
         appService.deleteAllProducts();
@@ -75,7 +69,6 @@ public class AppController implements AppControllerMethods {
     }
 
     @PutMapping(path = PRODUCT_URI)
-    @Override
     public ResponseEntity<?> updateProduct(@NotNull @RequestBody Product product) throws ProductNotPresentException {
         log.info("UpdateProduct");
         appService.updateProduct(product);
@@ -83,26 +76,18 @@ public class AppController implements AppControllerMethods {
     }
 
     @GetMapping(path = PEXELS_URI + "{prompt}")
-    @Override
-    public ResponseEntity<PexelsImage> getAiImage(@NotNull @PathVariable String prompt) {
-        try {
-            return status(OK).body(appService.getImageByPrompt(prompt));
-        } catch (IOException | ExternalApiException e) {
-            e.printStackTrace();
-        }
+    public ResponseEntity<String> getExternalImage(@NotNull @PathVariable String prompt) throws ExternalApiException {
+
+        return status(OK).body(appService.getImageByPrompt(prompt));
+
         //todo what error code?
-        return status(BAD_GATEWAY).build();
+
     }
 
     @GetMapping(path = PEXELS_URI)
-    @Override
-    public ResponseEntity<PexelsImage> getRandomAiImage() {
-        try {
-            return status(OK).body(appService.getRandomImage());
-        } catch (IOException | ExternalApiException e) {
-            e.printStackTrace();
-        }
-        return status(BAD_GATEWAY).build();
+    public ResponseEntity<String> getRandomExternalImage() throws ExternalApiException {
+
+        return status(OK).body(appService.getRandomImage());
     }
 
     //Todo ADD EXCEPTION HANDLER -> throws error codes regarding specific exceptions !!!
@@ -115,7 +100,7 @@ public class AppController implements AppControllerMethods {
 
     @ExceptionHandler(ProductNotPresentException.class)
     public ResponseEntity<?> productNotPresentException(ProductNotPresentException e) {
-        log.error(e.getMessage() + "ExceptionHandler");
+        log.error(e.getMessage());
         return ResponseEntity.badRequest().build();
     }
 

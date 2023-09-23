@@ -2,19 +2,19 @@ package com.example.cbd.apiGateway.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.service.ImagePexelsService;
+import com.example.cbd.externalApi.service.ImagePexelsServiceMethods;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.ProductService;
+import com.example.cbd.storageApi.service.ProductServiceMethods;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.cbd.externalApi.model.PexelsImage;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @Service
-public class AppService implements AppServiceMethods {
+public class AppService implements ProductServiceMethods<Product>, ImagePexelsServiceMethods {
 
 
     private final ProductService productService;
@@ -25,15 +25,6 @@ public class AppService implements AppServiceMethods {
         this.productService = productService;
         this.imageGeneratorService = imageGeneratorService;
     }
-
-    /*private final ImageGeneratorService imageGeneratorService;
-    @Autowired
-    public AppService(StorageService storageService, ImageGeneratorService imageGeneratorService) {
-        this.storageService = storageService;
-        this.imageGeneratorService = imageGeneratorService;
-    }*/
-
-
 
     @Override
     public Product getProductById(@NotNull Long id) {
@@ -67,12 +58,12 @@ public class AppService implements AppServiceMethods {
 
 
     @Override
-    public PexelsImage getImageByPrompt(String prompt) throws IOException, ExternalApiException {
+    public String getImageByPrompt(String prompt) throws ExternalApiException {
         return this.imageGeneratorService.getImageByPrompt(prompt);
     }
 
     @Override
-    public PexelsImage getRandomImage() throws IOException, ExternalApiException {
+    public String getRandomImage() throws ExternalApiException {
         return this.imageGeneratorService.getRandomImage();
     }
 }

@@ -40,8 +40,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-pexelsImage</artifactId>
-			<scope>pexelsImage</scope>
+			<artifactId>spring-boot-starter-String</artifactId>
+			<scope>String</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

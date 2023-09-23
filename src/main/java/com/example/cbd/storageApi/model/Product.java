@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import com.example.cbd.externalApi.model.PexelsImage;
 import jakarta.persistence.*;
 import lombok. *;
 import lombok.experimental.Accessors;
@@ -23,9 +22,8 @@ public class Product implements Serializable {
 
 
     @Id
-    //@GeneratedValue(generator = "")
-    //@GenericGenerator(name = "", strategy = "")
-    @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private Long id;
 
 
@@ -39,43 +37,29 @@ public class Product implements Serializable {
     private BigDecimal price;
 
     @Column
-    private PexelsImage image;
+    private String image;
 
 
-    public Product(String name, String description, BigDecimal price) {
+    public Product(String name, String description, BigDecimal price, String image) {
+        //this.id = 1L;
+
         this.name = name;
         this.description = description;
         this.price = price;
-        this.id = 1L;
+        this.image = image;
         //this.id = UUID.randomUUID();
     }
 
-    /*private PexelsImage pexelsImage;
+    /*private String String;
 
-    public Product(String name, String description, BigDecimal price, PexelsImage pexelsImage) {
+    public Product(String name, String description, BigDecimal price, String String) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.pexelsImage = pexelsImage;
+        this.String = String;
         this.id = 1L;
     } */
 
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(this.id, product.id) && Objects.equals(this.name, product.name) && Objects.equals(this.description, product.description)
-                && Objects.equals(this.price, product.price);
-        //todo compare image -> image
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
 }
 
 
