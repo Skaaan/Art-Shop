@@ -37,7 +37,6 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
     }
 
     private String apiRequest(String prompt) throws ExternalApiException {
-        //String api_url = "/search?query=" + prompt;
 
         /**
          * Weitere Attribute können sein: "orientation", "size", "color", "locale", "page", "per_page"
@@ -49,8 +48,6 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
                 .queryParam("query", prompt)
                 .queryParam("page", 1)
                 .queryParam("per_page", 1);
-
-                //.queryParam("size", 2);
 
         String api_url = uriBuilder.toUriString();
 
@@ -96,15 +93,14 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
     @Override
     public String getImageByPrompt(String prompt) throws ExternalApiException {
         String res = getImageUrl(prompt);
-
-        //log.info("Image Url: " + res + ", Prompt: " + prompt);
+        log.info("URL {} was created", res);
         return res;
     }
 
     @Override
     public String getRandomImage() throws ExternalApiException {
         String res = getImageUrl(RANDOM_PROMPT);
-
+        log.info("URL {} was created", res);
         return res;
     }
 }

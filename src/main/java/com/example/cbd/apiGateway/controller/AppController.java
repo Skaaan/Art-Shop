@@ -32,11 +32,9 @@ public class AppController {
         this.appService = appService;
     }
 
-    //@PreAuthorize("hasRole('user')")
     @GetMapping(path = PRODUCT_URI + "{id}")
     //add api description
     public ResponseEntity<?> getProductById(@NotNull @PathVariable("id") Long id) {
-        //add logging
         log.info("GetProduct by following id \"{}\"", id);
         return status(OK).body(appService.getProductById(id));
     }
@@ -77,20 +75,16 @@ public class AppController {
 
     @GetMapping(path = PEXELS_URI + "{prompt}")
     public ResponseEntity<String> getExternalImage(@NotNull @PathVariable String prompt) throws ExternalApiException {
-
+        log.info("GetExternalImage by following prompt {}", prompt);
         return status(OK).body(appService.getImageByPrompt(prompt));
-
-        //todo what error code?
-
     }
 
     @GetMapping(path = PEXELS_URI)
     public ResponseEntity<String> getRandomExternalImage() throws ExternalApiException {
-
+        log.info("GetRandomExternalImage");
         return status(OK).body(appService.getRandomImage());
     }
 
-    //Todo ADD EXCEPTION HANDLER -> throws error codes regarding specific exceptions !!!
 
     @ExceptionHandler(ExternalApiException.class)
     public ResponseEntity<?> externalApiException(ExternalApiException e) {
