@@ -15,7 +15,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -41,7 +41,7 @@ class ProductServiceTest {
         Product expectedProduct = new Product("p1", "p1 description", new BigDecimal("44.5"), "image");
         expectedProduct.setId(productId);
 
-        when(productRepository.getProductById(productId)).thenReturn(expectedProduct);
+        when(productRepository.getProductById(productId)).thenReturn(expectedProduct); //configure behaviour test for the mock
 
         Product actualProduct = productService.getProductById(productId);
 
@@ -114,7 +114,7 @@ class ProductServiceTest {
         when(productRepository.findAll()).thenReturn(Collections.emptyList());
 
         Iterable<Product> actualProducts = productService.getAllProducts();
-
+        
         assertThat(actualProducts).isEmpty();
         assertTrue(!actualProducts.iterator().hasNext());
     }
