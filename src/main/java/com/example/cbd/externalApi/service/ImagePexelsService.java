@@ -21,7 +21,6 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
 
     private final String BASE_URL = "https://api.pexels.com/v1/";
     private final String API_TOKEN;
-    private final String RANDOM_PROMPT = "Random";
 
     private final int AMOUNT_PER_PAGE = 10;
 
@@ -71,7 +70,6 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
 
         String api_url = uriBuilder.toUriString();
         String jsonString = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
-        log.info("Json String: " + jsonString);
         try {
             JsonNode srcNode = objectMapper.readTree(jsonString);
 

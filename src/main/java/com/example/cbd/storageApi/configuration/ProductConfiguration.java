@@ -18,8 +18,8 @@ public class ProductConfiguration {
     @Bean
     CommandLineRunner commandLineRunner(ProductRepository productRepository) {
         return args -> {
-            Product one = new Product(1L, "Cat Image", "An image of a cat.", new BigDecimal("20"), "https://images.pexels.com/photos/3687770/pexels-photo-3687770.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200");
-            Product two = new Product( 2L, "Dog Image", "An image of a dog.", new BigDecimal("10"), "https://images.pexels.com/photos/3687770/pexels-photo-3687770.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800");
+            Product one = new Product(1L, "Cat Image", "An image of a cat.", new BigDecimal("20"), "https://images.pexels.com/photos/3687770/pexels-photo-3687770.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800");
+            Product two = new Product( 2L, "Dog Image", "An image of a dog.", new BigDecimal("10"), "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800");
 
             productRepository.saveAll(List.of(one, two));
             log.info("Products got presaved into database");
