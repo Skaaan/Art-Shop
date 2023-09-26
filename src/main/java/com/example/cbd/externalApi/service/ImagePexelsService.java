@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Random;
+
 
 @Slf4j
 @Service
@@ -20,6 +22,8 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
     private final String BASE_URL = "https://api.pexels.com/v1/";
     private final String API_TOKEN;
     private final String RANDOM_PROMPT = "Random";
+
+    private final int AMOUNT_PER_PAGE = 10;
 
     private final WebClient client;
 
@@ -33,56 +37,67 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
         objectMapper = new ObjectMapper();
-
     }
 
     private String apiRequest(String prompt) throws ExternalApiException {
 
-        /**
-         * Weitere Attribute können sein: "orientation", "size", "color", "locale", "page", "per_page"
-         * size: large (24MP), medium (12mp), small (4mp)
-         * page: requested page number (default=1)
-         * per_page: number of results per page (default=15, max=80)
-         */
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("search")
                 .queryParam("query", prompt)
                 .queryParam("page", 1)
                 .queryParam("per_page", 1);
 
         String api_url = uriBuilder.toUriString();
-
         String jsonString = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
 
-
         try {
-            return convertToObject(jsonString);
+            JsonNode srcNode = objectMapper.readTree(jsonString);
+
+            JsonNode sizeNode = srcNode
+                    .path("photos")
+                    .get(0)
+                    .path("src");
+
+            return sizeNode.path("portrait").toString();
         } catch (JsonProcessingException e) {
             throw new ExternalApiException();
         }
-
     }
 
-    private String convertToObject(String json) throws JsonProcessingException {
+    private String apiRequest() throws ExternalApiException {
 
-        JsonNode srcNode = objectMapper.readTree(json);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("curated")
+                .queryParam("page", 1)
+                .queryParam("per_page", AMOUNT_PER_PAGE);
 
-        JsonNode sizeNode = srcNode
-                .path("photos")
-                .get(0)
-                .path("src");
+        String api_url = uriBuilder.toUriString();
+        String jsonString = client.get().uri(api_url).retrieve().bodyToMono(String.class).block();
+        log.info("Json String: " + jsonString);
+        try {
+            JsonNode srcNode = objectMapper.readTree(jsonString);
 
-        String image = sizeNode.path("landscape").asText();
+            JsonNode sizeNode = srcNode
+                    .path("photos")
+                    .get(new Random().nextInt(AMOUNT_PER_PAGE))
+                    .path("src");
 
-        return image;
+            return sizeNode.path("portrait").toString();
+        } catch (JsonProcessingException e) {
+            throw new ExternalApiException();
+        }
     }
+
 
 
     private String getImageUrl(String prompt) throws ExternalApiException {
         try {
-            var response = apiRequest(prompt);
+            String response;
+            if(prompt.equals("")) {
+                response = apiRequest();
+            } else {
+                response = apiRequest(prompt);
+            }
             if (response != null) {
                 return response;
-                //return new URL(response.getPhotos().get(0).getSrc().getMedium());
             }
             throw new ExternalApiException("The API was not able to create an Image out of the prompt");
         } catch (Exception e) {
@@ -99,7 +114,7 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
 
     @Override
     public String getRandomImage() throws ExternalApiException {
-        String res = getImageUrl(RANDOM_PROMPT);
+        String res = getImageUrl("");
         log.info("URL {} was created", res);
         return res;
     }
