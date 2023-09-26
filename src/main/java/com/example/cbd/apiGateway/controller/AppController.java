@@ -32,6 +32,8 @@ public class AppController {
         this.appService = appService;
     }
 
+
+
     @GetMapping(path = PRODUCT_URI + "{id}")
     //add api description
     public ResponseEntity<?> getProductById(@NotNull @PathVariable("id") Long id) {
