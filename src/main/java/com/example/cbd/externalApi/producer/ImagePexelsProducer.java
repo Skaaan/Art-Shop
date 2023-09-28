@@ -11,6 +11,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,13 +19,26 @@ import static com.example.cbd.externalApi.model.ImageMessageType.*;
 
 @RequiredArgsConstructor
 @Slf4j
+@Service
 public class ImagePexelsProducer implements ImagePexelsServiceMethods {
+    /*
+
+    private DirectExchange directExchange;
+
+    public ImagePexelsProducer(RabbitTemplate rabbitTemplate, DirectExchange directExchange) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.directExchange = directExchange;
+    }
+*/
+
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private DirectExchange directExchange;
-    @Value("${keys.image-service}")
+
+    //@Value("${routing-keys.image-service}")
+    @Value("image_key")
     private String IMAGE_SERVICE_KEY;
 
     @Override

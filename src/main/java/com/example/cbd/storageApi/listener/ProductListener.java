@@ -21,8 +21,12 @@ public class ProductListener {
     @Autowired
     private ProductService productService;
 
-    @RabbitListener(queues = "${queues.product-service}")
+    //@RabbitListener(queues = "${queue-names.product-service}")
+    @RabbitListener(queues = "product_queue")
     public String handle(Message message) {
+
+        log.info(message.getMessageProperties().getType());
+        log.info(String.valueOf(message));
 
         try {
             final ProductMessageType messageType = ProductMessageType.valueOf(message.getMessageProperties().getType());

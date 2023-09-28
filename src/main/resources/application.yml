@@ -23,16 +23,16 @@ spring:
     host: localhost
     port: 5672
 
-  queues:
-    product-service: product-service.queue
-    image-service: image-service.queue
+queue-names:
+  product-service: product-service.queue
+  image-service: image-service.queue
 
-  keys:
-    product-service: product-service.key
-    image-service: image-service.key
+routing-keys:
+  product-service: product-service.key
+  image-service: image-service.key
 
-  direct-exchange:
-    name: exchange
+xchange:
+  name: exchange
 
 
 

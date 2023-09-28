@@ -21,7 +21,8 @@ public class ImagePexelsListener {
     @Autowired
     private ImagePexelsService pexelsService;
 
-    @RabbitListener(queues = "${queues.product-service}")
+    //@RabbitListener(queues = "${queue-names.image-service}")
+    @RabbitListener(queues = "image_queue")
     public String handle(Message message) {
 
         try {

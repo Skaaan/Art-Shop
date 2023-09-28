@@ -17,37 +17,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfiguration {
 
-    @Value("${direct-exchange.name}")
+    /*@Value("${xchange.name}")
     public static String DIRECT_EXCHANGE;
-    @Value("${queues.product-service}")
+    @Value("${queue-names.product-service}")
     public static String PRODUCT_QUEUE;
-    @Value("${queues.image-service}")
+    @Value("${queue-names.image-service}")
     public static String IMAGE_QUEUE;
-    @Value("${keys.product-service}")
+    @Value("${routing-keys.product-service}")
     public static String PRODUCT_KEY;
-    @Value("${keys.image-service}")
-    public static String IMAGE_KEY;
+    @Value("${routing-keys.image-service}")
+    public static String IMAGE_KEY;*/
 
+    @Value("xchange_name")
+    private String DIRECT_EXCHANGE;
+    @Value("product_queue")
+    private String PRODUCT_QUEUE;
+    @Value("image_queue")
+    private String IMAGE_QUEUE;
+    @Value("product_key")
+    private String PRODUCT_KEY;
+    @Value("image_key")
+    private String IMAGE_KEY;
 
-    @Bean
-    public ProductListener productListener() {
-        return new ProductListener();
-    }
-
-    @Bean
-    public ImagePexelsListener imagePexelsListener() {
-        return new ImagePexelsListener();
-    }
-
-    @Bean
-    public ProductProducer productProducer() {
-        return new ProductProducer();
-    }
-
-    @Bean
-    public ImagePexelsProducer imagePexelsProducer() {
-        return new ImagePexelsProducer();
-    }
 
     @Bean
     public DirectExchange directExchange() {
@@ -73,6 +64,25 @@ public class RabbitMQConfiguration {
     public Binding imageBinding(Queue imageQueue, DirectExchange exchange) {
         return BindingBuilder.bind(imageQueue).to(exchange).with(IMAGE_KEY);
     }
+/*
+    @Bean
+    public ProductListener productListener() {
+        return new ProductListener();
+    }
 
+    @Bean
+    public ImagePexelsListener imagePexelsListener() {
+        return new ImagePexelsListener();
+    }
+
+    @Bean
+    public ProductProducer productProducer() {
+        return new ProductProducer();
+    }
+
+    @Bean
+    public ImagePexelsProducer imagePexelsProducer() {
+        return new ImagePexelsProducer();
+    }*/
 
 }

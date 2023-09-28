@@ -15,21 +15,36 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.example.cbd.storageApi.model.ProductMessageType.*;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class ProductProducer implements ProductServiceMethods<Product> {
+
+    /*
+
+    private RabbitTemplate rabbitTemplate;
+    //private DirectExchange directExchange;
+
+    public ProductProducer(RabbitTemplate rabbitTemplate, DirectExchange directExchange) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.directExchange = directExchange;
+    } */
+
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
     private DirectExchange directExchange;
-    @Value("${keys.product-service}")
+
+    //@Value("${routing-keys.product-service}")
+    @Value("product_key")
     private String PRODUCT_SERVICE_KEY;
 
 
@@ -77,6 +92,7 @@ public class ProductProducer implements ProductServiceMethods<Product> {
     private Message processMessage(Message message, ProductMessageType messageType, String errorTag, String errorMessage) throws MessagingErrorException {
         var received = rabbitTemplate.sendAndReceive(directExchange.getName(), PRODUCT_SERVICE_KEY, message);
         message.getMessageProperties().setType(messageType.name());
+        log.info(message.getMessageProperties().getType());
         if(receivedMessageHasError(received)) {
             log.error("Error occured in {}. Received Message is null.", errorTag);
             throw new MessagingErrorException(errorMessage);
