@@ -1,9 +1,8 @@
-package com.example.cbd.apiGateway.producer;
+package com.example.cbd.storageApi.producer;
 
 
 import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
-import com.example.cbd.apiGateway.model.MessageType;
-import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
+import com.example.cbd.storageApi.model.ProductMessageType;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.service.ProductServiceMethods;
 import com.google.gson.Gson;
@@ -20,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.example.cbd.apiGateway.model.MessageType.*;
+import static com.example.cbd.storageApi.model.ProductMessageType.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -75,7 +74,7 @@ public class ProductProducer implements ProductServiceMethods<Product> {
 
     }
 
-    private Message processMessage(Message message, MessageType messageType, String errorTag, String errorMessage) throws MessagingErrorException {
+    private Message processMessage(Message message, ProductMessageType messageType, String errorTag, String errorMessage) throws MessagingErrorException {
         var received = rabbitTemplate.sendAndReceive(directExchange.getName(), PRODUCT_SERVICE_KEY, message);
         message.getMessageProperties().setType(messageType.name());
         if(receivedMessageHasError(received)) {

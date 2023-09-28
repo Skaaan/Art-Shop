@@ -51,8 +51,8 @@ public class ProductService implements ProductServiceMethods<Product> {
         return productRepository.findAll();
     }
 
-    @Override
     @CacheEvict(value = CACHE_TAG, key="#id", allEntries = true)
+    @Override
     public void deleteProduct(@NotNull Long id) throws ProductNotPresentException {
         if (!productIsPresent(id)) {
             throw new ProductNotPresentException("");

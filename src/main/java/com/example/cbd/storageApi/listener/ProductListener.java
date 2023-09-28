@@ -1,9 +1,10 @@
-package com.example.cbd.storageApi.service;
+package com.example.cbd.storageApi.listener;
 
 
-import com.example.cbd.apiGateway.model.MessageType;
+import com.example.cbd.storageApi.model.ProductMessageType;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
+import com.example.cbd.storageApi.service.ProductService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -20,12 +21,11 @@ public class ProductListener {
     @Autowired
     private ProductService productService;
 
-    @RabbitListener(queues = "${queue}")
+    @RabbitListener(queues = "${queues.product-service}")
     public String handle(Message message) {
 
-
         try {
-            final MessageType messageType = MessageType.valueOf(message.getMessageProperties().getType());
+            final ProductMessageType messageType = ProductMessageType.valueOf(message.getMessageProperties().getType());
 
             switch (messageType) {
                 case GET_PRODUCT: {
@@ -36,9 +36,21 @@ public class ProductListener {
                     log.info("GET ALL PRODUCTS Message received: {}", message);
                     return getAllProducts();
                 }
+                case CREATE_PRODUCT: {
+                    log.info("CREATE PRODUCT Message received: {}", message);
+                    return createProduct(convertToProduct(message));
+                }
                 case DELETE_PRODUCT: {
                     log.info("DELETE PRODUCT Message received: {}", message);
                     return deleteProduct(convertToId(message));
+                }
+                case DELETE_ALL_PRODUCTS: {
+                    log.info("DELETE ALL PRODUCTS Message received: {}", message);
+                    return deleteAllProducts();
+                }
+                case UPDATE_PRODUCT: {
+                    log.info("UPDATE PRODUCT Message received: {}", message);
+                    return updateProduct(convertToProduct(message));
                 }
                 default: {
                     return error();
@@ -51,6 +63,8 @@ public class ProductListener {
         }
         return error();
     }
+
+
 
     private String error() {
         return "error";
@@ -74,6 +88,15 @@ public class ProductListener {
         return "product_deleted";
     }
 
+    private String deleteAllProducts() {
+        productService.deleteAllProducts();
+        return new Gson().toJson("all_products_deleted");
+    }
+
+    private String updateProduct(Product product) throws ProductNotPresentException {
+        productService.updateProduct(product);
+        return "product_updated";
+    }
 
     private long convertToId(Message message) {
         return Long.parseLong(new String(message.getBody(), StandardCharsets.UTF_8));

@@ -1,21 +1,28 @@
 package com.example.cbd.apiGateway.service;
 
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
+import com.example.cbd.externalApi.producer.ImagePexelsProducer;
 import com.example.cbd.externalApi.service.ImagePexelsService;
 import com.example.cbd.externalApi.service.ImagePexelsServiceMethods;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
+import com.example.cbd.storageApi.producer.ProductProducer;
 import com.example.cbd.storageApi.service.ProductService;
 import com.example.cbd.storageApi.service.ProductServiceMethods;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@RequiredArgsConstructor
 @Service
 public class AppService implements ProductServiceMethods<Product>, ImagePexelsServiceMethods {
 
+
+    //private final ProductProducer productProducer;
+    //private final ImagePexelsProducer imagePexelsProducer;
 
     private final ProductService productService;
     private final ImagePexelsService imageGeneratorService;

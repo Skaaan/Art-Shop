@@ -17,7 +17,6 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @Accessors(chain = true)
-
 public class Product implements Serializable {
 
 

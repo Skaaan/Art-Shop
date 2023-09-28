@@ -1,12 +1,10 @@
-package com.example.cbd.apiGateway.model;
+package com.example.cbd.storageApi.model;
 
-public enum MessageType {
+public enum ProductMessageType {
     GET_PRODUCT,
     GET_ALL_PRODUCTS,
     CREATE_PRODUCT,
     DELETE_PRODUCT,
     UPDATE_PRODUCT,
     DELETE_ALL_PRODUCTS,
-    GET_IMAGE,
-    GET_RANDOM_IMAGE
 }
