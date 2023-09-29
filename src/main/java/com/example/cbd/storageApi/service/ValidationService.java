@@ -29,7 +29,7 @@ public class ValidationService {
         return product.getName() == null || product.getDescription() == null || product.getPrice() == null;
     }
 
-    private boolean imageUrlIsValid(Product product) {
+     private boolean imageUrlIsValid(Product product) {
         try {
             new URI(product.getImage());
             return true;
