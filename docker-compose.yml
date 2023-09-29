@@ -1,17 +1,17 @@
 services:
 
-  app:
-    container_name: SpringBootAppTest
-    build:
-      dockerfile: Dockerfile
-    ports:
-     - "8080:8080"
-    depends_on:
-      - mysql-database
-      - redis-cache
-      - rabbitmq
-    networks:
-      backend:
+  #app:
+    #container_name: SpringBootAppTest
+    #build:
+    #  dockerfile: Dockerfile
+    #ports:
+    # - "8080:8080"
+    #depends_on:
+    #  - mysql-database
+    #  - redis-cache
+    #  - rabbitmq
+    #networks:
+    #  backend:
 
   mysql-database:
     image: mysql
