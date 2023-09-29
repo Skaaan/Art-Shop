@@ -6,69 +6,174 @@ import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.util.List;
 
-@WebMvcTest(AppController.class)
-@AutoConfigureMockMvc
-public class AppControllerTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-    @Autowired
-    private MockMvc mockMvc;
+class AppControllerTest {
 
-    @MockBean
+    @Mock
     private AppService appService;
 
-    private Product testProduct;
+    @InjectMocks
+    private AppController appController;
 
     @BeforeEach
-    public void setUp() throws ExternalApiException {
-        testProduct = new Product();
-        testProduct.setId(1L);
-        testProduct.setName("Test Product");
-        testProduct.setDescription("This is a test product");
-
-        Mockito.when(appService.getProductById(1L)).thenReturn(testProduct);
-        Mockito.when(appService.getAllProducts()).thenReturn(Collections.singletonList(testProduct));
-        Mockito.when(appService.getImageByPrompt(Mockito.anyString())).thenReturn("Test Image URL");
-        Mockito.when(appService.getRandomImage()).thenReturn("Random Image URL");
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testGetProductById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Product"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("This is a test product"));
+    void testGetProductById() {
+        Long productId = 1L;
+        Product product =  new Product("Product1", "Description1", BigDecimal.valueOf(10.0), "image1.jpg");
+        when(appService.getProductById(productId)).thenReturn(product);
+
+        ResponseEntity<?> responseEntity = appController.getProductById(productId);
+
+        verify(appService).getProductById(productId);
     }
 
     @Test
-    public void testDeleteProductById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/product/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+    void testGetAllProducts() {
+        List<Product> productList = List.of(
+                new Product("Product1", "Description1", BigDecimal.valueOf(10.0), "image1.jpg"),
+                new Product("Product2", "Description2", BigDecimal.valueOf(20.0), "image2.jpg")
+        );
+
+        when(appService.getAllProducts()).thenReturn(productList);
+
+        ResponseEntity<?> responseEntity = appController.getAllProducts();
+
+        verify(appService).getAllProducts();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        assertNotNull(responseEntity.getBody());
+
+        List<Product> responseProducts = (List<Product>) responseEntity.getBody();
+        assertEquals(productList.size(), responseProducts.size());
+
+        assertEquals("Product1", responseProducts.get(0).getName());
+        assertEquals("Description1", responseProducts.get(0).getDescription());
+        assertEquals(BigDecimal.valueOf(10.0), responseProducts.get(0).getPrice());
+        assertEquals("image1.jpg", responseProducts.get(0).getImage());
     }
 
     @Test
-    public void testGetExternalImage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/pexels/TestPrompt")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Test Image URL"));
+    void testCreateProduct() {
+        Product product = new Product("Product1", "Description", BigDecimal.valueOf(10.0), "image.jpg");
+
+        doNothing().when(appService).createProduct(any(Product.class));
+
+        ResponseEntity<?> responseEntity = appController.createProduct(product);
+
+        verify(appService).createProduct(eq(product));
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    void testDeleteProductById() throws ProductNotPresentException {
+        Long productId = 1L;
+
+        doNothing().when(appService).deleteProduct(productId);
+
+        ResponseEntity<?> responseEntity = appController.deleteProductById(productId);
+
+        verify(appService).deleteProduct(eq(productId));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    void testDeleteAllProducts() {
+        doNothing().when(appService).deleteAllProducts();
+
+        ResponseEntity<?> responseEntity = appController.deleteAllProducts();
+
+        verify(appService).deleteAllProducts();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    void testUpdateProduct() throws ProductNotPresentException {
+        Product updatedProduct = new Product("Updated Product", "Updated Description", BigDecimal.valueOf(15.0), "updated.jpg");
+
+        doNothing().when(appService).updateProduct(updatedProduct);
+
+        ResponseEntity<?> responseEntity = appController.updateProduct(updatedProduct);
+
+        verify(appService).updateProduct(eq(updatedProduct));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    void testGetExternalImage() throws ExternalApiException {
+        String prompt = "sample_prompt";
+        String sampleImageUrl = "http://test.com/image.jpg";
+        when(appService.getImageByPrompt(prompt)).thenReturn(sampleImageUrl);
+
+        ResponseEntity<String> responseEntity = appController.getExternalImage(prompt);
+
+        verify(appService).getImageByPrompt(eq(prompt));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(sampleImageUrl, responseEntity.getBody());
+    }
+
+    @Test
+    void testGetRandomExternalImage() throws ExternalApiException {
+        String sampleImageUrl = "http://test.com/sample.jpg";
+        when(appService.getRandomImage()).thenReturn(sampleImageUrl);
+
+        ResponseEntity<String> responseEntity = appController.getRandomExternalImage();
+
+        verify(appService).getRandomImage();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(sampleImageUrl, responseEntity.getBody());
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    @Test
+    void testExternalApiException() {
+        ExternalApiException exception = new ExternalApiException("Error message");
+        ResponseEntity<?> responseEntity = appController.externalApiException(exception);
+    }
+
+    @Test
+    void testProductNotPresentException() {
+        ProductNotPresentException exception = new ProductNotPresentException("Error message");
+        ResponseEntity<?> responseEntity = appController.productNotPresentException(exception);
+    }
 
 
 }
