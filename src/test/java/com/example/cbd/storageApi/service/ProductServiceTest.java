@@ -48,8 +48,6 @@ class ProductServiceTest {
         assertEquals(expectedProduct, actualProduct);
     }
 
-
-
     @Test
     void testCreateProduct() {
         Product expectedProduct = new Product("p1", "p1 description", new BigDecimal("44.5"), "image");
@@ -60,7 +58,6 @@ class ProductServiceTest {
         Product actualProduct = productCaptor.getValue();
         assertEquals(expectedProduct, actualProduct);
     }
-
 
     @Test
     void testCreateMultipleProducts() {
@@ -82,7 +79,6 @@ class ProductServiceTest {
         assertEquals(5, allProducts.size());
     }
 
-
     @Test
     void testGetAllProducts_One_Product() {
         Product expectedProduct = new Product("p1", "p1 description", new BigDecimal("44.5"), "image");
@@ -92,7 +88,6 @@ class ProductServiceTest {
 
         assertEquals(Collections.singletonList(expectedProduct), actualProducts);
     }
-
 
     @Test
     void testGetAllProducts_Three_Products() {
@@ -108,7 +103,6 @@ class ProductServiceTest {
         assertEquals(List.of(product1, product2, product3), actualProducts, "The actual products should match the expected products");
     }
 
-
     @Test
     void testGetAllProducts_No_Products() {
         when(productRepository.findAll()).thenReturn(Collections.emptyList());
@@ -118,17 +112,6 @@ class ProductServiceTest {
         assertThat(actualProducts).isEmpty();
         assertTrue(!actualProducts.iterator().hasNext());
     }
-
-    @Test
-    void testDeleteProduct_WhenProductIsPresent() throws ProductNotPresentException {
-        Long productId = 1L;
-        when(productRepository.findById(productId)).thenReturn(Optional.of(new Product()));
-
-        productService.deleteProduct(productId);
-
-        verify(productRepository).deleteById(productId);
-    }
-
 
     @Test
     void testDeleteProduct_ProductIsPresent() {
@@ -153,7 +136,6 @@ class ProductServiceTest {
         verify(productRepository, times(1)).deleteById(existingProductId);
         assertEquals(0, ((List<Product>) productService.getAllProducts()).size(), "Finally, there should be no product");
     }
-
 
     @Test
     void testDeleteProduct_WhenProductIsNotPresent() {
