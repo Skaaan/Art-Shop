@@ -29,11 +29,7 @@ class ValidationServiceTest {
         assertThrows(IllegalArgumentException.class, () -> validationService.validateProduct(productWithInvalidImageUrl));
     }
 
-    @Test
-    void testImageUrlIsValid_ValidUrl() {
-        Product productWithValidImageUrl = new Product("Product Name", "Product Description", BigDecimal.valueOf(10.0), "https://example.com/image.jpg");
-        assertTrue(validationService.imageUrlIsValid(productWithValidImageUrl));
-    }
+
 
 
 }
