@@ -39,6 +39,7 @@ public class ImagePexelsListener {
                 }
             }
         } catch (Exception e) {
+            log.info(e.getMessage());
             return error();
         }
     }

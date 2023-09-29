@@ -1,16 +1,17 @@
 services:
 
-  #app:
-   # container_name: SpringBootAppTest
-    #build:
-     # dockerfile: Dockerfile
-    #ports:
-     # - "8080:8080"
-    #depends_on:
-     # - mysql-database
-      #- redis-cache
-      #- rabbitmq
-
+  app:
+    container_name: SpringBootAppTest
+    build:
+      dockerfile: Dockerfile
+    ports:
+     - "8080:8080"
+    depends_on:
+      - mysql-database
+      - redis-cache
+      - rabbitmq
+    networks:
+      backend:
 
   mysql-database:
     image: mysql
@@ -23,7 +24,8 @@ services:
       MYSQL_ROOT_PASSWORD: "mypassword"
     ports:
       - "3306:3306"
-
+    networks:
+      backend:
 
   redis-cache:
     restart: always
@@ -31,13 +33,21 @@ services:
     image: redis
     ports:
       - "6379:6379"
+    networks:
+      backend:
+
 
   rabbitmq:
+    restart: on-failure
     image: rabbitmq:management
     container_name: "rabbitmq-compose"
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      backend:
 
-#environment:
-  #- API_KEY=
+
+networks:
+  backend:
+

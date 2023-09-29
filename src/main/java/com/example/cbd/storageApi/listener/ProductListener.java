@@ -57,6 +57,7 @@ public class ProductListener {
                 }
             }
         } catch (Exception e) {
+            log.info(e.getMessage());
             return error();
         }
     }

@@ -38,7 +38,8 @@ public class ProductService implements ProductServiceMethods<Product> {
     @CacheEvict(value = CACHE_TAG, allEntries = true)
     @Override
     public void createProduct(@NotNull Product product) {
-        validationService.validateProduct(product);
+        //commented, because the front end is not capable of react to that changes
+        //validationService.validateProduct(product);
         productRepository.save(product);
     }
 
@@ -72,8 +73,7 @@ public class ProductService implements ProductServiceMethods<Product> {
         if (!productRepository.findById(product.getId()).isPresent()) {
             throw new ProductNotPresentException("Student with id: " + product.getId() + " does not exist");
         }
-        validationService.validateProduct(product);
-        //todo include validationservice
+        //validationService.validateProduct(product);
         productRepository.save(product);
     }
 
