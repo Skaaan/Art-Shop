@@ -1,7 +1,6 @@
 package com.example.cbd.externalApi.listener;
 
 import com.example.cbd.externalApi.model.ImageMessageType;
-import com.example.cbd.storageApi.model.ProductMessageType;
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.externalApi.service.ImagePexelsService;
 import com.google.gson.Gson;
@@ -17,11 +16,9 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class ImagePexelsListener {
 
-
     @Autowired
     private ImagePexelsService pexelsService;
 
-    //@RabbitListener(queues = "${queue-names.image-service}")
     @RabbitListener(queues = "image_queue")
     public String handle(Message message) {
 
@@ -41,12 +38,9 @@ public class ImagePexelsListener {
                     return error();
                 }
             }
-        } catch (IllegalArgumentException e) {
-
-        } catch (ExternalApiException ex) {
-
+        } catch (Exception e) {
+            return error();
         }
-        return error();
     }
 
     private String error() {
@@ -64,7 +58,5 @@ public class ImagePexelsListener {
     private String getRandomImage() throws ExternalApiException {
         return new Gson().toJson(pexelsService.getRandomImage());
     }
-
-
 
 }

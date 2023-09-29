@@ -4,7 +4,6 @@ import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import org.jetbrains.annotations.NotNull;
 
-
 public interface ProductServiceMethods<T> {
 
     T getProductById(@NotNull Long id) throws MessagingErrorException;

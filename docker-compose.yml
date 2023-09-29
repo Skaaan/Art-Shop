@@ -1,5 +1,17 @@
 services:
 
+  #app:
+   # container_name: SpringBootAppTest
+    #build:
+     # dockerfile: Dockerfile
+    #ports:
+     # - "8080:8080"
+    #depends_on:
+     # - mysql-database
+      #- redis-cache
+      #- rabbitmq
+
+
   mysql-database:
     image: mysql
     container_name: "mysql-compose"
@@ -14,13 +26,14 @@ services:
 
 
   redis-cache:
+    restart: always
     container_name: "redis-compose"
     image: redis
     ports:
       - "6379:6379"
 
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:management
     container_name: "rabbitmq-compose"
     ports:
       - "5672:5672"

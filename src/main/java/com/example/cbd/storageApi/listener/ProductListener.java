@@ -21,12 +21,8 @@ public class ProductListener {
     @Autowired
     private ProductService productService;
 
-    //@RabbitListener(queues = "${queue-names.product-service}")
     @RabbitListener(queues = "product_queue")
     public String handle(Message message) {
-
-        log.info(message.getMessageProperties().getType());
-        log.info(String.valueOf(message));
 
         try {
             final ProductMessageType messageType = ProductMessageType.valueOf(message.getMessageProperties().getType());
@@ -60,14 +56,10 @@ public class ProductListener {
                     return error();
                 }
             }
-        } catch (IllegalArgumentException e) {
-
-        } catch (ProductNotPresentException ex) {
-
+        } catch (Exception e) {
+            return error();
         }
-        return error();
     }
-
 
 
     private String error() {
@@ -109,7 +101,5 @@ public class ProductListener {
     private Product convertToProduct(Message message) {
         return new Gson().fromJson(new String(message.getBody(), StandardCharsets.UTF_8), Product.class);
     }
-
-
 
 }

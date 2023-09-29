@@ -23,16 +23,19 @@ spring:
     host: localhost
     port: 5672
 
-queue-names:
-  product-service: product-service.queue
-  image-service: image-service.queue
+rabbitmq:
+  exchanges:
+    internal: internal.exchange
 
-routing-keys:
-  product-service: product-service.key
-  image-service: image-service.key
+  queues:
+    product: product.queue
+    image: image.queue
 
-xchange:
-  name: exchange
+  routing-keys:
+    internal-product: internal.product.routing-key
+    internal-image: internal.image.routing-key
+
+
 
 
 

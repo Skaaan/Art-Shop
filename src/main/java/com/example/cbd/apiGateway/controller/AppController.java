@@ -6,15 +6,15 @@ import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.status;
@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping(path="api/")
+@RequestMapping(path = "api/")
 @RestController
 public class AppController {
 
@@ -38,7 +38,6 @@ public class AppController {
 
     @Operation(summary = "Get a product by id.")
     @GetMapping(path = PRODUCT_URI + "{id}")
-    //add api description
     public ResponseEntity<?> getProductById(@Parameter(description = "Id of the product you want to fetch.") @NotNull @PathVariable("id") Long id) throws MessagingErrorException {
         log.info("GetProduct by following id \"{}\"", id);
         return status(OK).body(appService.getProductById(id));
@@ -77,7 +76,7 @@ public class AppController {
 
     @Operation(summary = "Update a product.")
     @PutMapping(path = PRODUCT_URI)
-    public ResponseEntity<?> updateProduct(@Parameter(description = "Product body, containing the correct id and all the updated values.")@NotNull @RequestBody Product product) throws ProductNotPresentException, MessagingErrorException {
+    public ResponseEntity<?> updateProduct(@Parameter(description = "Product body, containing the correct id and all the updated values.") @NotNull @RequestBody Product product) throws ProductNotPresentException, MessagingErrorException {
         log.info("UpdateProduct");
         appService.updateProduct(product);
         return status(OK).build();
@@ -97,21 +96,8 @@ public class AppController {
         return status(OK).body(appService.getRandomImage());
     }
 
-
-    @ExceptionHandler(ExternalApiException.class)
-    public ResponseEntity<?> externalApiException(ExternalApiException e) {
-        log.error(e.getMessage());
-        return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(ProductNotPresentException.class)
-    public ResponseEntity<?> productNotPresentException(ProductNotPresentException e) {
-        log.error(e.getMessage());
-        return ResponseEntity.badRequest().build();
-    }
-
     @ExceptionHandler(MessagingErrorException.class)
-    public ResponseEntity<?> productNotPresentException(MessagingErrorException e) {
+    public ResponseEntity<?> messageErrorException(MessagingErrorException e) {
         log.error(e.getMessage());
         return ResponseEntity.badRequest().build();
     }

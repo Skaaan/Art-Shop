@@ -1,25 +1,7 @@
 package com.example.cbd.externalApi.service;
 
-import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 /*
+    Old External API -> OpenAI Image Generation
 
 @Service
 public class ImageGeneratorService implements ImageGeneratorServiceMethods {
@@ -107,7 +89,5 @@ public class ImageGeneratorService implements ImageGeneratorServiceMethods {
         }
 
     }
-
-
 
 }*/

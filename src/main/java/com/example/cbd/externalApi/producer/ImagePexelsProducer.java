@@ -21,23 +21,13 @@ import static com.example.cbd.externalApi.model.ImageMessageType.*;
 @Slf4j
 @Service
 public class ImagePexelsProducer implements ImagePexelsServiceMethods {
-    /*
-
-    private DirectExchange directExchange;
-
-    public ImagePexelsProducer(RabbitTemplate rabbitTemplate, DirectExchange directExchange) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.directExchange = directExchange;
-    }
-*/
-
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
     @Autowired
     private DirectExchange directExchange;
 
-    //@Value("${routing-keys.image-service}")
     @Value("image_key")
     private String IMAGE_SERVICE_KEY;
 
@@ -56,9 +46,9 @@ public class ImagePexelsProducer implements ImagePexelsServiceMethods {
     }
 
     private Message processMessage(Message message, ImageMessageType messageType, String errorTag, String errorMessage) throws MessagingErrorException {
-        var received = rabbitTemplate.sendAndReceive(directExchange.getName(), IMAGE_SERVICE_KEY, message);
         message.getMessageProperties().setType(messageType.name());
-        if(receivedMessageHasError(received)) {
+        var received = rabbitTemplate.sendAndReceive(directExchange.getName(), IMAGE_SERVICE_KEY, message);
+        if (receivedMessageHasError(received)) {
             log.error("Error occured in {}. Received Message is null.", errorTag);
             throw new MessagingErrorException(errorMessage);
         }
@@ -70,7 +60,5 @@ public class ImagePexelsProducer implements ImagePexelsServiceMethods {
                 receivedMessage.getBody() == null ||
                 new String(receivedMessage.getBody(), StandardCharsets.UTF_8).equals("error");
     }
-
-
 
 }

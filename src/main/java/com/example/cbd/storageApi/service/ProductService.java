@@ -1,6 +1,5 @@
 package com.example.cbd.storageApi.service;
 
-
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.repository.ProductRepository;
@@ -14,33 +13,32 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.Optional;
-
 @Slf4j
 @Service
 @CacheConfig
 public class ProductService implements ProductServiceMethods<Product> {
 
     private final ProductRepository productRepository;
+    private final ValidationService validationService;
 
     private final String CACHE_TAG = "product";
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ValidationService validationService) {
         this.productRepository = productRepository;
+        this.validationService = validationService;
     }
 
-    @Cacheable(value = CACHE_TAG, key="#id")
+    @Cacheable(value = CACHE_TAG, key = "#id")
     @Override
     public Product getProductById(@NotNull Long id) {
         return productRepository.getProductById(id);
     }
 
-    @CacheEvict(value=CACHE_TAG, allEntries = true)
+    @CacheEvict(value = CACHE_TAG, allEntries = true)
     @Override
     public void createProduct(@NotNull Product product) {
-        //todo validationService
+        validationService.validateProduct(product);
         productRepository.save(product);
     }
 
@@ -51,10 +49,10 @@ public class ProductService implements ProductServiceMethods<Product> {
         return productRepository.findAll();
     }
 
-    @CacheEvict(value = CACHE_TAG, key="#id", allEntries = true)
+    @CacheEvict(value = CACHE_TAG, key = "#id", allEntries = true)
     @Override
     public void deleteProduct(@NotNull Long id) throws ProductNotPresentException {
-        if (!productIsPresent(id)) {
+        if (!productRepository.findById(id).isPresent()) {
             throw new ProductNotPresentException("");
         }
         productRepository.deleteById(id);
@@ -66,19 +64,17 @@ public class ProductService implements ProductServiceMethods<Product> {
         productRepository.deleteAll();
     }
 
-    @CachePut(value = CACHE_TAG, key="#id")
+    @CachePut(value = CACHE_TAG, key = "#id")
     @Transactional
     @Override
     public void updateProduct(Product product) throws ProductNotPresentException {
 
-        if (!productIsPresent(product.getId())) {
+        if (!productRepository.findById(product.getId()).isPresent()) {
             throw new ProductNotPresentException("Student with id: " + product.getId() + " does not exist");
         }
+        validationService.validateProduct(product);
         //todo include validationservice
         productRepository.save(product);
     }
 
-    private boolean productIsPresent(Long id) {
-        return productRepository.findById(id).isPresent();
-    }
 }

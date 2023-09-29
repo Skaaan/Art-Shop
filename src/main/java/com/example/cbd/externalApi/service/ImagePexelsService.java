@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.Random;
 @Slf4j
 @Service
 public class ImagePexelsService implements ImagePexelsServiceMethods {
-
 
     private final String BASE_URL = "https://api.pexels.com/v1/";
     private final String API_TOKEN;
@@ -86,11 +84,10 @@ public class ImagePexelsService implements ImagePexelsServiceMethods {
     }
 
 
-
     private String getImageUrl(String prompt) throws ExternalApiException {
         try {
             String response;
-            if(prompt.equals("")) {
+            if (prompt.equals("")) {
                 response = apiRequest();
             } else {
                 response = apiRequest(prompt);

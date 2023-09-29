@@ -1,13 +1,11 @@
 package com.example.cbd.storageApi.model;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Objects;
-
 import jakarta.persistence.*;
-import lombok. *;
+import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 @Entity
@@ -38,26 +36,12 @@ public class Product implements Serializable {
     @Column
     private String image;
 
-
     public Product(String name, String description, BigDecimal price, String image) {
-        //this.id = 1L;
-
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
-        //this.id = UUID.randomUUID();
     }
-
-    /*private String String;
-
-    public Product(String name, String description, BigDecimal price, String String) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.String = String;
-        this.id = 1L;
-    } */
 
 }
 

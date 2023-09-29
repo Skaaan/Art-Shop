@@ -1,14 +1,7 @@
 package com.example.cbd.apiGateway.configuration;
 
 
-import com.example.cbd.externalApi.listener.ImagePexelsListener;
-import com.example.cbd.externalApi.producer.ImagePexelsProducer;
-import com.example.cbd.storageApi.listener.ProductListener;
-import com.example.cbd.storageApi.producer.ProductProducer;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,18 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfiguration {
 
-    /*@Value("${xchange.name}")
-    public static String DIRECT_EXCHANGE;
-    @Value("${queue-names.product-service}")
-    public static String PRODUCT_QUEUE;
-    @Value("${queue-names.image-service}")
-    public static String IMAGE_QUEUE;
-    @Value("${routing-keys.product-service}")
-    public static String PRODUCT_KEY;
-    @Value("${routing-keys.image-service}")
-    public static String IMAGE_KEY;*/
-
-    @Value("xchange_name")
+    @Value("exchange_name")
     private String DIRECT_EXCHANGE;
     @Value("product_queue")
     private String PRODUCT_QUEUE;
@@ -38,7 +20,6 @@ public class RabbitMQConfiguration {
     private String PRODUCT_KEY;
     @Value("image_key")
     private String IMAGE_KEY;
-
 
     @Bean
     public DirectExchange directExchange() {
@@ -56,33 +37,14 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Binding productBinding(Queue productQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(productQueue).to(exchange).with(PRODUCT_KEY);
+    public Binding productBinding() {
+        return BindingBuilder.bind(productQueue()).to(directExchange()).with(PRODUCT_KEY);
     }
 
     @Bean
-    public Binding imageBinding(Queue imageQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(imageQueue).to(exchange).with(IMAGE_KEY);
-    }
-/*
-    @Bean
-    public ProductListener productListener() {
-        return new ProductListener();
+    public Binding imageBinding() {
+        return BindingBuilder.bind(imageQueue()).to(directExchange()).with(IMAGE_KEY);
     }
 
-    @Bean
-    public ImagePexelsListener imagePexelsListener() {
-        return new ImagePexelsListener();
-    }
-
-    @Bean
-    public ProductProducer productProducer() {
-        return new ProductProducer();
-    }
-
-    @Bean
-    public ImagePexelsProducer imagePexelsProducer() {
-        return new ImagePexelsProducer();
-    }*/
 
 }
