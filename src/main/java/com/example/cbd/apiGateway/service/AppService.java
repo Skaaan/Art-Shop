@@ -1,67 +1,63 @@
 package com.example.cbd.apiGateway.service;
 
-import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.service.ImageGeneratorService;
+import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
+import com.example.cbd.externalApi.producer.ImagePexelsProducer;
+import com.example.cbd.externalApi.service.ImagePexelsServiceMethods;
 import com.example.cbd.storageApi.model.Product;
-import com.example.cbd.storageApi.service.StorageService;
+import com.example.cbd.storageApi.producer.ProductProducer;
+import com.example.cbd.storageApi.service.ProductServiceMethods;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
+@RequiredArgsConstructor
 @Service
-public class AppService implements AppServiceMethods {
+public class AppService implements ProductServiceMethods<Product>, ImagePexelsServiceMethods {
 
+    private final ProductProducer productProducer;
+    private final ImagePexelsProducer imagePexelsProducer;
 
-    private final StorageService storageService;
-    private final ImageGeneratorService imageGeneratorService;
-
-
-    @Autowired
-    public AppService(StorageService storageService, ImageGeneratorService imageGeneratorService) {
-        this.storageService = storageService;
-        this.imageGeneratorService = imageGeneratorService;
+    @Override
+    public Product getProductById(@NotNull Long id) throws MessagingErrorException {
+        return productProducer.getProductById(id);
     }
 
     @Override
-    public Product getProductById(@NotNull Long id) {
-        return this.storageService.getProductById(id);
+    public Iterable<Product> getAllProducts() throws MessagingErrorException {
+        return productProducer.getAllProducts();
     }
 
     @Override
-    public Iterable<Product> getAllProducts() {
-        return this.storageService.getAllProducts();
+    public void createProduct(@NotNull Product product) throws MessagingErrorException {
+        productProducer.createProduct(product);
     }
 
     @Override
-    public void createProduct(@NotNull Product product) {
-        this.storageService.createProduct(product);
+    public void deleteProduct(@NotNull Long id) throws MessagingErrorException {
+        productProducer.deleteProduct(id);
+
     }
 
     @Override
-    public void deleteProduct(@NotNull Long id) {
-        this.storageService.deleteProduct(id);
+    public void deleteAllProducts() throws MessagingErrorException {
+        productProducer.deleteAllProducts();
+
     }
 
     @Override
-    public void deleteAllProducts() {
-        this.storageService.deleteAllProducts();
+    public void updateProduct(@NotNull Product product) throws MessagingErrorException {
+        productProducer.updateProduct(product);
+
     }
 
     @Override
-    public void updateProduct(@NotNull Long id, String name) {
-        this.storageService.updateProduct(id, name);
-    }
-
-
-    @Override
-    public String getImageByPrompt(String prompt) throws IOException, ExternalApiException {
-        return this.imageGeneratorService.getImageByPrompt(prompt);
+    public String getImageByPrompt(String prompt) throws MessagingErrorException {
+        return imagePexelsProducer.getImageByPrompt(prompt);
     }
 
     @Override
-    public String getRandomImage() throws IOException, ExternalApiException {
-        return this.imageGeneratorService.getRandomImage();
+    public String getRandomImage() throws MessagingErrorException {
+        return imagePexelsProducer.getRandomImage();
     }
+
 }

@@ -10,6 +10,4 @@ public class ExternalApiException extends Exception {
         super(message);
     }
 
-
-
 }
