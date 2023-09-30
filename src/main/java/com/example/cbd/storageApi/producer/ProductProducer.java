@@ -4,7 +4,7 @@ package com.example.cbd.storageApi.producer;
 import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
 import com.example.cbd.storageApi.model.ProductMessageType;
 import com.example.cbd.storageApi.model.Product;
-import com.example.cbd.storageApi.service.ProductServiceMethods;
+import com.example.cbd.storageApi.ProductServiceMethods;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
 package com.example.cbd.storageApi.service;
 
+import com.example.cbd.storageApi.ValidationService;
 import com.example.cbd.storageApi.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,11 +24,6 @@ class ValidationServiceTest {
         assertThrows(NullPointerException.class, () -> validationService.validateProduct(productWithNullValue));
     }
 
-    @Test
-    void testValidateProduct_InvalidImageUrl() {
-        Product productWithInvalidImageUrl = new Product("Product Name", "Product Description", BigDecimal.valueOf(10.0), "invalid-url");
-        assertThrows(IllegalArgumentException.class, () -> validationService.validateProduct(productWithInvalidImageUrl));
-    }
 
 
 

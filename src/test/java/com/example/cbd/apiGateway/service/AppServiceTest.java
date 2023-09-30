@@ -1,11 +1,12 @@
 package com.example.cbd.apiGateway.service;
 
 
+import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
-import com.example.cbd.externalApi.service.ImagePexelsService;
+import com.example.cbd.externalApi.producer.ImagePexelsProducer;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
-import com.example.cbd.storageApi.service.ProductService;
+import com.example.cbd.storageApi.producer.ProductProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AppServiceTest {
-/*
+
     private AppService appService;
 
     @Mock
-    private ProductService productService;
+    private ProductProducer productService;
 
     @Mock
-    private ImagePexelsService imageGeneratorService;
+    private ImagePexelsProducer imageGeneratorService;
 
     @BeforeEach
     public void setUp() {
@@ -34,7 +35,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testGetProductById() {
+    public void testGetProductById() throws MessagingErrorException {
         Product sampleProduct = new Product();
         sampleProduct.setId(1L);
         sampleProduct.setName("Test Product");
@@ -47,7 +48,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testGetAllProducts() {
+    public void testGetAllProducts() throws MessagingErrorException {
         Product product1 = new Product();
         product1.setId(1L);
         product1.setName("Product 1");
@@ -64,7 +65,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testCreateProduct() {
+    public void testCreateProduct() throws MessagingErrorException {
         Product newProduct = new Product();
         newProduct.setId(2L);
         newProduct.setName("New Product");
@@ -75,7 +76,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testDeleteProductById() throws ProductNotPresentException {
+    public void testDeleteProductById() throws ProductNotPresentException, MessagingErrorException {
         Mockito.doNothing().when(productService).deleteProduct(1L);
 
         appService.deleteProduct(1L);
@@ -84,7 +85,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testDeleteAllProducts() {
+    public void testDeleteAllProducts() throws MessagingErrorException {
         Mockito.doNothing().when(productService).deleteAllProducts();
 
         appService.deleteAllProducts();
@@ -93,7 +94,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testUpdateProduct() throws ProductNotPresentException {
+    public void testUpdateProduct() throws ProductNotPresentException, MessagingErrorException {
         Product updatedProduct = new Product();
         updatedProduct.setId(1L);
         updatedProduct.setName("Updated Product");
@@ -106,7 +107,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testGetImageByPrompt() throws ExternalApiException {
+    public void testGetImageByPrompt() throws ExternalApiException, MessagingErrorException {
         Mockito.when(imageGeneratorService.getImageByPrompt("TestPrompt")).thenReturn("Test Image URL");
 
         String result = appService.getImageByPrompt("TestPrompt");
@@ -115,7 +116,7 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testGetRandomImage() throws ExternalApiException {
+    public void testGetRandomImage() throws ExternalApiException, MessagingErrorException {
         Mockito.when(imageGeneratorService.getRandomImage()).thenReturn("Random Image URL");
 
         String result = appService.getRandomImage();
@@ -124,20 +125,12 @@ public class AppServiceTest {
     }
 
     @Test
-    public void testDeleteProductByIdThrowsException() throws ProductNotPresentException {
+    public void testDeleteProductByIdThrowsException() throws ProductNotPresentException, MessagingErrorException {
         Mockito.doThrow(new ProductNotPresentException("Product not found")).when(productService).deleteProduct(1L);
 
         assertThrows(ProductNotPresentException.class, () -> appService.deleteProduct(1L));
     }
 
-    @Test
-    public void testUpdateProductThrowsException() throws ProductNotPresentException {
-        Product updatedProduct = new Product();
-        updatedProduct.setId(1L);
-        updatedProduct.setName("Updated Product");
 
-        Mockito.doThrow(new ProductNotPresentException("Product not found")).when(productService).updateProduct(updatedProduct);
 
-        assertThrows(ProductNotPresentException.class, () -> appService.updateProduct(updatedProduct));
-    }*/
 }

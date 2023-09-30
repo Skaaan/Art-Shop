@@ -1,4 +1,4 @@
-package com.example.cbd.storageApi.service;
+package com.example.cbd.storageApi;
 
 import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;

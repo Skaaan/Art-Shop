@@ -1,5 +1,6 @@
 package com.example.cbd.apiGateway.controller;
 
+import com.example.cbd.apiGateway.exceptions.MessagingErrorException;
 import com.example.cbd.apiGateway.service.AppService;
 import com.example.cbd.externalApi.exceptions.ExternalApiException;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class AppControllerTest {
-/*
+
     @Mock
     private AppService appService;
 
@@ -33,7 +34,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testGetProductById() {
+    void testGetProductById() throws MessagingErrorException {
         Long productId = 1L;
         Product product =  new Product("Product1", "Description1", BigDecimal.valueOf(10.0), "image1.jpg");
         when(appService.getProductById(productId)).thenReturn(product);
@@ -44,7 +45,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testGetAllProducts() {
+    void testGetAllProducts() throws MessagingErrorException {
         List<Product> productList = List.of(
                 new Product("Product1", "Description1", BigDecimal.valueOf(10.0), "image1.jpg"),
                 new Product("Product2", "Description2", BigDecimal.valueOf(20.0), "image2.jpg")
@@ -70,7 +71,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testCreateProduct() {
+    void testCreateProduct() throws MessagingErrorException {
         Product product = new Product("Product1", "Description", BigDecimal.valueOf(10.0), "image.jpg");
 
         doNothing().when(appService).createProduct(any(Product.class));
@@ -84,7 +85,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testDeleteProductById() throws ProductNotPresentException {
+    void testDeleteProductById() throws ProductNotPresentException, MessagingErrorException {
         Long productId = 1L;
 
         doNothing().when(appService).deleteProduct(productId);
@@ -98,7 +99,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testDeleteAllProducts() {
+    void testDeleteAllProducts() throws MessagingErrorException {
         doNothing().when(appService).deleteAllProducts();
 
         ResponseEntity<?> responseEntity = appController.deleteAllProducts();
@@ -110,7 +111,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testUpdateProduct() throws ProductNotPresentException {
+    void testUpdateProduct() throws ProductNotPresentException, MessagingErrorException {
         Product updatedProduct = new Product("Updated Product", "Updated Description", BigDecimal.valueOf(15.0), "updated.jpg");
 
         doNothing().when(appService).updateProduct(updatedProduct);
@@ -124,7 +125,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testGetExternalImage() throws ExternalApiException {
+    void testGetExternalImage() throws ExternalApiException, MessagingErrorException {
         String prompt = "sample_prompt";
         String sampleImageUrl = "http://test.com/image.jpg";
         when(appService.getImageByPrompt(prompt)).thenReturn(sampleImageUrl);
@@ -138,7 +139,7 @@ class AppControllerTest {
     }
 
     @Test
-    void testGetRandomExternalImage() throws ExternalApiException {
+    void testGetRandomExternalImage() throws ExternalApiException, MessagingErrorException {
         String sampleImageUrl = "http://test.com/sample.jpg";
         when(appService.getRandomImage()).thenReturn(sampleImageUrl);
 
@@ -151,29 +152,14 @@ class AppControllerTest {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
-    void testExternalApiException() {
-        ExternalApiException exception = new ExternalApiException("Error message");
-        ResponseEntity<?> responseEntity = appController.externalApiException(exception);
+    void testMessageErrorException() {
+        MessagingErrorException exception = new MessagingErrorException("Test error message");
+        ResponseEntity<?> responseEntity = appController.messageErrorException(exception);
+
+        assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
-    @Test
-    void testProductNotPresentException() {
-        ProductNotPresentException exception = new ProductNotPresentException("Error message");
-        ResponseEntity<?> responseEntity = appController.productNotPresentException(exception);
-    }
 
-*/
+
 }
