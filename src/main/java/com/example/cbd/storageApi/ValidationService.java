@@ -1,4 +1,4 @@
-package com.example.cbd.storageApi.service;
+package com.example.cbd.storageApi;
 
 
 import com.example.cbd.storageApi.model.Product;

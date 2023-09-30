@@ -4,7 +4,7 @@ package com.example.cbd.storageApi.listener;
 import com.example.cbd.storageApi.model.ProductMessageType;
 import com.example.cbd.storageApi.exceptions.ProductNotPresentException;
 import com.example.cbd.storageApi.model.Product;
-import com.example.cbd.storageApi.service.ProductService;
+import com.example.cbd.storageApi.ProductService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

@@ -5,7 +5,7 @@ import com.example.cbd.externalApi.producer.ImagePexelsProducer;
 import com.example.cbd.externalApi.service.ImagePexelsServiceMethods;
 import com.example.cbd.storageApi.model.Product;
 import com.example.cbd.storageApi.producer.ProductProducer;
-import com.example.cbd.storageApi.service.ProductServiceMethods;
+import com.example.cbd.storageApi.ProductServiceMethods;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
